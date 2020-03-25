@@ -1,6 +1,3 @@
-/*
- * このソースコードは blanco Frameworkにより自動生成されました。
- */
 package blanco.valueobject.task;
 
 import org.apache.tools.ant.BuildException;

@@ -1,6 +1,3 @@
-/*
- * このソースコードは blanco Frameworkにより自動生成されました。
- */
 package blanco.valueobject.message;
 
 import java.text.MessageFormat;

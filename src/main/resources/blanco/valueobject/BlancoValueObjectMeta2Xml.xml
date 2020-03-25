@@ -107,6 +107,9 @@
         <propertykey name="adjustFieldName" waitX="2">
           <value>フィールド名の変形</value>
         </propertykey>
+        <propertykey name="adjustDefaultValue" waitX="2">
+          <value>デフォルト値の変形</value>
+        </propertykey>
 
         <valuemapping>
           <result>true</result>
