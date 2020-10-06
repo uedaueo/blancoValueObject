@@ -5,7 +5,7 @@
 	<groupId>blanco.valueobject</groupId>
 	<artifactId>blanco-valueobject</artifactId>
 	<packaging>jar</packaging>
-	<version>2.1.0</version>
+	<version>2.1.1</version>
 	<name>blanco-valueobject</name>
 	<url>https://igapyon.github.io/blancofw-maven2</url>
 
@@ -272,20 +272,20 @@
 						</goals>
 					</execution>
 
-					<execution>
-						<id>blanco-meta-valueobject-test</id>
-						<phase>generate-test-sources</phase>
-						<configuration>
-							<target>
-								<taskdef name="blancovalueobject" classname="blanco.valueobject.task.BlancoValueObjectTask" classpathref="maven.runtime.classpath">
-								</taskdef>
-								<blancovalueobject metadir="meta/objects" encoding="${project.build.sourceEncoding}" tmpdir="tmpTest" targetdir="sample/blanco" targetStyle="maven" verbose="true" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
+<!--					<execution>-->
+<!--						<id>blanco-meta-valueobject-test</id>-->
+<!--						<phase>generate-test-sources</phase>-->
+<!--						<configuration>-->
+<!--							<target>-->
+<!--								<taskdef name="blancovalueobject" classname="blanco.valueobject.task.BlancoValueObjectTask" classpathref="maven.runtime.classpath">-->
+<!--								</taskdef>-->
+<!--								<blancovalueobject metadir="meta/objects" encoding="${project.build.sourceEncoding}" tmpdir="tmpTest" targetdir="sample/blanco" targetStyle="maven" verbose="true" />-->
+<!--							</target>-->
+<!--						</configuration>-->
+<!--						<goals>-->
+<!--							<goal>run</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
 
 					<execution>
 						<id>blanco-clean</id>
@@ -306,18 +306,18 @@
 					</execution>
 				</executions>
 
-				<dependencies>
-					<dependency>
-						<groupId>commons-net</groupId>
-						<artifactId>commons-net</artifactId>
-						<version>1.4.1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.ant</groupId>
-						<artifactId>ant-commons-net</artifactId>
-						<version>1.8.1</version>
-					</dependency>
-				</dependencies>
+<!--				<dependencies>-->
+<!--					<dependency>-->
+<!--						<groupId>commons-net</groupId>-->
+<!--						<artifactId>commons-net</artifactId>-->
+<!--						<version>1.4.1</version>-->
+<!--					</dependency>-->
+<!--					<dependency>-->
+<!--						<groupId>org.apache.ant</groupId>-->
+<!--						<artifactId>ant-commons-net</artifactId>-->
+<!--						<version>1.8.1</version>-->
+<!--					</dependency>-->
+<!--				</dependencies>-->
 			</plugin>
 
 			<!-- add java source folder -->
@@ -347,8 +347,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 					<excludes>
 						<exclude>blanco/sample/**/*</exclude>
 					</excludes>
@@ -374,22 +374,6 @@
 						<exclude>blanco/sample/**/*</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
-
-			<!-- copy jar files into lib directory. -->
-			<plugin>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
