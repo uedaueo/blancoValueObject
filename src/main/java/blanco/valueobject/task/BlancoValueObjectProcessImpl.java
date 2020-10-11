@@ -1,7 +1,7 @@
 /*
  * blanco Framework
  * Copyright (C) 2004-2008 IGA Tosiki
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -12,8 +12,8 @@ package blanco.valueobject.task;
 import blanco.cg.BlancoCgSupportedLang;
 import blanco.valueobject.BlancoValueObjectConstants;
 import blanco.valueobject.BlancoValueObjectMeta2Xml;
+import blanco.valueobject.BlancoValueObjectUtil;
 import blanco.valueobject.BlancoValueObjectXml2JavaClass;
-import blanco.valueobject.BlancoValueObjectXmlParser;
 import blanco.valueobject.message.BlancoValueObjectMessage;
 import blanco.valueobject.task.valueobject.BlancoValueObjectProcessInput;
 
@@ -40,6 +40,39 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
             if (fileMetadir.exists() == false) {
                 throw new IllegalArgumentException(fMsg.getMbvoja01(input
                         .getMetadir()));
+            }
+
+
+            /*
+             * 改行コードを決定します。
+             */
+            String LF = "\n";
+            String CR = "\r";
+            String CRLF = CR + LF;
+            String lineSeparatorMark = input.getLineSeparator();
+            String lineSeparator = "";
+            if ("LF".equals(lineSeparatorMark)) {
+                lineSeparator = LF;
+            } else if ("CR".equals(lineSeparatorMark)) {
+                lineSeparator = CR;
+            } else if ("CRLF".equals(lineSeparatorMark)) {
+                lineSeparator = CRLF;
+            }
+            if (lineSeparator.length() != 0) {
+                System.setProperty("line.separator", lineSeparator);
+                if (input.getVerbose()) {
+                    System.out.println("lineSeparator try to change to " + lineSeparatorMark);
+                    String newProp = System.getProperty("line.separator");
+                    String newMark = "other";
+                    if (LF.equals(newProp)) {
+                        newMark = "LF";
+                    } else if (CR.equals(newProp)) {
+                        newMark = "CR";
+                    } else if (CRLF.equals(newProp)) {
+                        newMark = "CRLF";
+                    }
+                    System.out.println("New System Props = " + newMark);
+                }
             }
 
             /*
@@ -82,13 +115,21 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
             final File[] fileMeta2 = new File(input.getTmpdir()
                     + BlancoValueObjectConstants.TARGET_SUBDIRECTORY)
                     .listFiles();
+            /*
+             * まず始めにすべてのシートを検索して，クラス名とpackage名のリストを作ります．
+             * php形式の定義書では，クラスを指定する際にpackage名が指定されていないからです．
+             * ここでは生のxml情報を取得する必要があるので、共通で使用するオプションを
+             * セットする前に呼び出さなければならない。
+             */
+            BlancoValueObjectUtil.processValueObjects(input);
 
-        /*
-         * まず始めにすべてのシートを検索して，クラス名とpackage名のリストを作ります．
-         * php形式の定義書では，クラスを指定する際にpackage名が指定されていないからです．
-         */
-            BlancoValueObjectXmlParser.classList =
-                    BlancoValueObjectXmlParser.createClassListFromSheets(fileMeta2);
+            /*
+             * 共通で使用するオプションを記憶する
+             */
+            BlancoValueObjectUtil.packageSuffix = input.getPackageSuffix();
+            BlancoValueObjectUtil.overridePackage = input.getOverridePackage();
+            BlancoValueObjectUtil.voPackageSuffix = input.getVoPackageSuffix();
+            BlancoValueObjectUtil.voOverridePackage = input.getVoOverridePackage();
 
             for (int index = 0; index < fileMeta2.length; index++) {
                 if (fileMeta2[index].getName().endsWith(".xml") == false) {

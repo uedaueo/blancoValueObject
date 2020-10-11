@@ -50,6 +50,37 @@ public class BlancoValueObjectFieldStructure {
     private String fDefault;
 
     /**
+     * Java優先型名をパッケージ名のフル修飾付で指定します。
+     *
+     * フィールド: [typeJava]。
+     */
+    private String fTypeJava;
+
+    /**
+     * abstract変数かどうか
+     *
+     * フィールド: [abstract]。
+     * デフォルト: [false]。
+     */
+    private Boolean fAbstract = false;
+
+    /**
+     * 必須変数かどうか。必須の場合は @NotNull アノテーションが付与されます。
+     *
+     * フィールド: [required]。
+     * デフォルト: [false]。
+     */
+    private Boolean fRequired = false;
+
+    /**
+     * 変更不可変数かどうか
+     *
+     * フィールド: [fixedValue]。
+     * デフォルト: [false]。
+     */
+    private Boolean fFixedValue = false;
+
+    /**
      * フィールドの説明です。
      *
      * フィールド: [description]。
@@ -237,6 +268,97 @@ public class BlancoValueObjectFieldStructure {
      */
     public String getDefault() {
         return fDefault;
+    }
+
+    /**
+     * フィールド [typeJava] の値を設定します。
+     *
+     * フィールドの説明: [Java優先型名をパッケージ名のフル修飾付で指定します。]。
+     *
+     * @param argTypeJava フィールド[typeJava]に設定する値。
+     */
+    public void setTypeJava(final String argTypeJava) {
+        fTypeJava = argTypeJava;
+    }
+
+    /**
+     * フィールド [typeJava] の値を取得します。
+     *
+     * フィールドの説明: [Java優先型名をパッケージ名のフル修飾付で指定します。]。
+     *
+     * @return フィールド[typeJava]から取得した値。
+     */
+    public String getTypeJava() {
+        return fTypeJava;
+    }
+
+    /**
+     * フィールド [abstract] の値を設定します。
+     *
+     * フィールドの説明: [abstract変数かどうか]。
+     *
+     * @param argAbstract フィールド[abstract]に設定する値。
+     */
+    public void setAbstract(final Boolean argAbstract) {
+        fAbstract = argAbstract;
+    }
+
+    /**
+     * フィールド [abstract] の値を取得します。
+     *
+     * フィールドの説明: [abstract変数かどうか]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[abstract]から取得した値。
+     */
+    public Boolean getAbstract() {
+        return fAbstract;
+    }
+
+    /**
+     * フィールド [required] の値を設定します。
+     *
+     * フィールドの説明: [必須変数かどうか。必須の場合は @NotNull アノテーションが付与されます。]。
+     *
+     * @param argRequired フィールド[required]に設定する値。
+     */
+    public void setRequired(final Boolean argRequired) {
+        fRequired = argRequired;
+    }
+
+    /**
+     * フィールド [required] の値を取得します。
+     *
+     * フィールドの説明: [必須変数かどうか。必須の場合は @NotNull アノテーションが付与されます。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[required]から取得した値。
+     */
+    public Boolean getRequired() {
+        return fRequired;
+    }
+
+    /**
+     * フィールド [fixedValue] の値を設定します。
+     *
+     * フィールドの説明: [変更不可変数かどうか]。
+     *
+     * @param argFixedValue フィールド[fixedValue]に設定する値。
+     */
+    public void setFixedValue(final Boolean argFixedValue) {
+        fFixedValue = argFixedValue;
+    }
+
+    /**
+     * フィールド [fixedValue] の値を取得します。
+     *
+     * フィールドの説明: [変更不可変数かどうか]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[fixedValue]から取得した値。
+     */
+    public Boolean getFixedValue() {
+        return fFixedValue;
     }
 
     /**
@@ -437,6 +559,10 @@ public class BlancoValueObjectFieldStructure {
         buf.append(",generic=" + fGeneric);
         buf.append(",annotationList=" + fAnnotationList);
         buf.append(",default=" + fDefault);
+        buf.append(",typeJava=" + fTypeJava);
+        buf.append(",abstract=" + fAbstract);
+        buf.append(",required=" + fRequired);
+        buf.append(",fixedValue=" + fFixedValue);
         buf.append(",description=" + fDescription);
         buf.append(",descriptionList=" + fDescriptionList);
         buf.append(",pattern=" + fPattern);
@@ -493,6 +619,18 @@ public class BlancoValueObjectFieldStructure {
         // Name: fDefault
         // Type: java.lang.String
         target.fDefault = this.fDefault;
+        // Name: fTypeJava
+        // Type: java.lang.String
+        target.fTypeJava = this.fTypeJava;
+        // Name: fAbstract
+        // Type: java.lang.Boolean
+        target.fAbstract = this.fAbstract;
+        // Name: fRequired
+        // Type: java.lang.Boolean
+        target.fRequired = this.fRequired;
+        // Name: fFixedValue
+        // Type: java.lang.Boolean
+        target.fFixedValue = this.fFixedValue;
         // Name: fDescription
         // Type: java.lang.String
         target.fDescription = this.fDescription;

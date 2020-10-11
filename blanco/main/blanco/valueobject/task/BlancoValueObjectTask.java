@@ -64,6 +64,36 @@ public class BlancoValueObjectTask extends Task {
     protected boolean fIsFieldTargetStyleProcessed = false;
 
     /**
+     * フィールド [lineSeparator] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldLineSeparatorProcessed = false;
+
+    /**
+     * フィールド [packageSuffix] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldPackageSuffixProcessed = false;
+
+    /**
+     * フィールド [overridePackage] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldOverridePackageProcessed = false;
+
+    /**
+     * フィールド [searchTmpdir] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldSearchTmpdirProcessed = false;
+
+    /**
+     * フィールド [voPackageSuffix] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldVoPackageSuffixProcessed = false;
+
+    /**
+     * フィールド [voOverridePackage] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldVoOverridePackageProcessed = false;
+
+    /**
      * verboseモードで動作させるかどうか。
      *
      * @param arg verboseモードで動作させるかどうか。
@@ -263,6 +293,157 @@ public class BlancoValueObjectTask extends Task {
     }
 
     /**
+     * Antタスクの[lineSeparator]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 8<br>
+     * 行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setLineSeparator(final String arg) {
+        fInput.setLineSeparator(arg);
+        fIsFieldLineSeparatorProcessed = true;
+    }
+
+    /**
+     * Antタスクの[lineSeparator]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 8<br>
+     * 行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。<br>
+     * デフォルト値[LF]が設定されています。Apache Antタスク上でアトリビュートの指定が無い場合には、デフォルト値が設定されます。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getLineSeparator() {
+        return fInput.getLineSeparator();
+    }
+
+    /**
+     * Antタスクの[packageSuffix]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 9<br>
+     * 定義書で指定されたパッケージ名の後ろに追加するパッケージ文字列を指定します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setPackageSuffix(final String arg) {
+        fInput.setPackageSuffix(arg);
+        fIsFieldPackageSuffixProcessed = true;
+    }
+
+    /**
+     * Antタスクの[packageSuffix]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 9<br>
+     * 定義書で指定されたパッケージ名の後ろに追加するパッケージ文字列を指定します。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getPackageSuffix() {
+        return fInput.getPackageSuffix();
+    }
+
+    /**
+     * Antタスクの[overridePackage]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 10<br>
+     * 定義書で指定されたパッケージ名を上書きします。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setOverridePackage(final String arg) {
+        fInput.setOverridePackage(arg);
+        fIsFieldOverridePackageProcessed = true;
+    }
+
+    /**
+     * Antタスクの[overridePackage]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 10<br>
+     * 定義書で指定されたパッケージ名を上書きします。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getOverridePackage() {
+        return fInput.getOverridePackage();
+    }
+
+    /**
+     * Antタスクの[searchTmpdir]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 11<br>
+     * import文作成のために検索するtmpディレクトリをカンマ区切りで指定します。指定ディレクトリ直下のvalueobjectディレクトリの下にxmlを探しにいきます。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setSearchTmpdir(final String arg) {
+        fInput.setSearchTmpdir(arg);
+        fIsFieldSearchTmpdirProcessed = true;
+    }
+
+    /**
+     * Antタスクの[searchTmpdir]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 11<br>
+     * import文作成のために検索するtmpディレクトリをカンマ区切りで指定します。指定ディレクトリ直下のvalueobjectディレクトリの下にxmlを探しにいきます。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getSearchTmpdir() {
+        return fInput.getSearchTmpdir();
+    }
+
+    /**
+     * Antタスクの[voPackageSuffix]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 12<br>
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの packageSuffix を指定します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setVoPackageSuffix(final String arg) {
+        fInput.setVoPackageSuffix(arg);
+        fIsFieldVoPackageSuffixProcessed = true;
+    }
+
+    /**
+     * Antタスクの[voPackageSuffix]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 12<br>
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの packageSuffix を指定します。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getVoPackageSuffix() {
+        return fInput.getVoPackageSuffix();
+    }
+
+    /**
+     * Antタスクの[voOverridePackage]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 13<br>
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setVoOverridePackage(final String arg) {
+        fInput.setVoOverridePackage(arg);
+        fIsFieldVoOverridePackageProcessed = true;
+    }
+
+    /**
+     * Antタスクの[voOverridePackage]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 13<br>
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。<br>
+     *
+     * @return このフィールドの値
+     */
+    public String getVoOverridePackage() {
+        return fInput.getVoOverridePackage();
+    }
+
+    /**
      * Antタスクのメイン処理。Apache Antから このメソッドが呼び出されます。
      *
      * @throws BuildException タスクとしての例外が発生した場合。
@@ -285,6 +466,12 @@ public class BlancoValueObjectTask extends Task {
             System.out.println("- xmlrootelement:[" + getXmlrootelement() + "]");
             System.out.println("- sheetType:[" + getSheetType() + "]");
             System.out.println("- targetStyle:[" + getTargetStyle() + "]");
+            System.out.println("- lineSeparator:[" + getLineSeparator() + "]");
+            System.out.println("- packageSuffix:[" + getPackageSuffix() + "]");
+            System.out.println("- overridePackage:[" + getOverridePackage() + "]");
+            System.out.println("- searchTmpdir:[" + getSearchTmpdir() + "]");
+            System.out.println("- voPackageSuffix:[" + getVoPackageSuffix() + "]");
+            System.out.println("- voOverridePackage:[" + getVoOverridePackage() + "]");
         }
 
         try {

@@ -67,6 +67,49 @@ public class BlancoValueObjectProcessInput {
     private String fTargetStyle = "blanco";
 
     /**
+     * 行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。
+     *
+     * フィールド: [lineSeparator]。
+     * デフォルト: [LF]。
+     */
+    private String fLineSeparator = "LF";
+
+    /**
+     * 定義書で指定されたパッケージ名の後ろに追加するパッケージ文字列を指定します。
+     *
+     * フィールド: [packageSuffix]。
+     */
+    private String fPackageSuffix;
+
+    /**
+     * 定義書で指定されたパッケージ名を上書きします。
+     *
+     * フィールド: [overridePackage]。
+     */
+    private String fOverridePackage;
+
+    /**
+     * import文作成のために検索するtmpディレクトリをカンマ区切りで指定します。指定ディレクトリ直下のvalueobjectディレクトリの下にxmlを探しにいきます。
+     *
+     * フィールド: [searchTmpdir]。
+     */
+    private String fSearchTmpdir;
+
+    /**
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの packageSuffix を指定します。
+     *
+     * フィールド: [voPackageSuffix]。
+     */
+    private String fVoPackageSuffix;
+
+    /**
+     * packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。
+     *
+     * フィールド: [voOverridePackage]。
+     */
+    private String fVoOverridePackage;
+
+    /**
      * フィールド [verbose] の値を設定します。
      *
      * フィールドの説明: [verboseモードで動作させるかどうか。]。
@@ -249,6 +292,139 @@ public class BlancoValueObjectProcessInput {
     }
 
     /**
+     * フィールド [lineSeparator] の値を設定します。
+     *
+     * フィールドの説明: [行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。]。
+     *
+     * @param argLineSeparator フィールド[lineSeparator]に設定する値。
+     */
+    public void setLineSeparator(final String argLineSeparator) {
+        fLineSeparator = argLineSeparator;
+    }
+
+    /**
+     * フィールド [lineSeparator] の値を取得します。
+     *
+     * フィールドの説明: [行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。]。
+     * デフォルト: [LF]。
+     *
+     * @return フィールド[lineSeparator]から取得した値。
+     */
+    public String getLineSeparator() {
+        return fLineSeparator;
+    }
+
+    /**
+     * フィールド [packageSuffix] の値を設定します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名の後ろに追加するパッケージ文字列を指定します。]。
+     *
+     * @param argPackageSuffix フィールド[packageSuffix]に設定する値。
+     */
+    public void setPackageSuffix(final String argPackageSuffix) {
+        fPackageSuffix = argPackageSuffix;
+    }
+
+    /**
+     * フィールド [packageSuffix] の値を取得します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名の後ろに追加するパッケージ文字列を指定します。]。
+     *
+     * @return フィールド[packageSuffix]から取得した値。
+     */
+    public String getPackageSuffix() {
+        return fPackageSuffix;
+    }
+
+    /**
+     * フィールド [overridePackage] の値を設定します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名を上書きします。]。
+     *
+     * @param argOverridePackage フィールド[overridePackage]に設定する値。
+     */
+    public void setOverridePackage(final String argOverridePackage) {
+        fOverridePackage = argOverridePackage;
+    }
+
+    /**
+     * フィールド [overridePackage] の値を取得します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名を上書きします。]。
+     *
+     * @return フィールド[overridePackage]から取得した値。
+     */
+    public String getOverridePackage() {
+        return fOverridePackage;
+    }
+
+    /**
+     * フィールド [searchTmpdir] の値を設定します。
+     *
+     * フィールドの説明: [import文作成のために検索するtmpディレクトリをカンマ区切りで指定します。指定ディレクトリ直下のvalueobjectディレクトリの下にxmlを探しにいきます。]。
+     *
+     * @param argSearchTmpdir フィールド[searchTmpdir]に設定する値。
+     */
+    public void setSearchTmpdir(final String argSearchTmpdir) {
+        fSearchTmpdir = argSearchTmpdir;
+    }
+
+    /**
+     * フィールド [searchTmpdir] の値を取得します。
+     *
+     * フィールドの説明: [import文作成のために検索するtmpディレクトリをカンマ区切りで指定します。指定ディレクトリ直下のvalueobjectディレクトリの下にxmlを探しにいきます。]。
+     *
+     * @return フィールド[searchTmpdir]から取得した値。
+     */
+    public String getSearchTmpdir() {
+        return fSearchTmpdir;
+    }
+
+    /**
+     * フィールド [voPackageSuffix] の値を設定します。
+     *
+     * フィールドの説明: [packageを探しにいくValueObject定義書を処理する際に指定されていたはずの packageSuffix を指定します。]。
+     *
+     * @param argVoPackageSuffix フィールド[voPackageSuffix]に設定する値。
+     */
+    public void setVoPackageSuffix(final String argVoPackageSuffix) {
+        fVoPackageSuffix = argVoPackageSuffix;
+    }
+
+    /**
+     * フィールド [voPackageSuffix] の値を取得します。
+     *
+     * フィールドの説明: [packageを探しにいくValueObject定義書を処理する際に指定されていたはずの packageSuffix を指定します。]。
+     *
+     * @return フィールド[voPackageSuffix]から取得した値。
+     */
+    public String getVoPackageSuffix() {
+        return fVoPackageSuffix;
+    }
+
+    /**
+     * フィールド [voOverridePackage] の値を設定します。
+     *
+     * フィールドの説明: [packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。]。
+     *
+     * @param argVoOverridePackage フィールド[voOverridePackage]に設定する値。
+     */
+    public void setVoOverridePackage(final String argVoOverridePackage) {
+        fVoOverridePackage = argVoOverridePackage;
+    }
+
+    /**
+     * フィールド [voOverridePackage] の値を取得します。
+     *
+     * フィールドの説明: [packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。]。
+     *
+     * @return フィールド[voOverridePackage]から取得した値。
+     */
+    public String getVoOverridePackage() {
+        return fVoOverridePackage;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -271,6 +447,12 @@ public class BlancoValueObjectProcessInput {
         buf.append(",xmlrootelement=" + fXmlrootelement);
         buf.append(",sheetType=" + fSheetType);
         buf.append(",targetStyle=" + fTargetStyle);
+        buf.append(",lineSeparator=" + fLineSeparator);
+        buf.append(",packageSuffix=" + fPackageSuffix);
+        buf.append(",overridePackage=" + fOverridePackage);
+        buf.append(",searchTmpdir=" + fSearchTmpdir);
+        buf.append(",voPackageSuffix=" + fVoPackageSuffix);
+        buf.append(",voOverridePackage=" + fVoOverridePackage);
         buf.append("]");
         return buf.toString();
     }
@@ -317,5 +499,23 @@ public class BlancoValueObjectProcessInput {
         // Name: fTargetStyle
         // Type: java.lang.String
         target.fTargetStyle = this.fTargetStyle;
+        // Name: fLineSeparator
+        // Type: java.lang.String
+        target.fLineSeparator = this.fLineSeparator;
+        // Name: fPackageSuffix
+        // Type: java.lang.String
+        target.fPackageSuffix = this.fPackageSuffix;
+        // Name: fOverridePackage
+        // Type: java.lang.String
+        target.fOverridePackage = this.fOverridePackage;
+        // Name: fSearchTmpdir
+        // Type: java.lang.String
+        target.fSearchTmpdir = this.fSearchTmpdir;
+        // Name: fVoPackageSuffix
+        // Type: java.lang.String
+        target.fVoPackageSuffix = this.fVoPackageSuffix;
+        // Name: fVoOverridePackage
+        // Type: java.lang.String
+        target.fVoOverridePackage = this.fVoOverridePackage;
     }
 }

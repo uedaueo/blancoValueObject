@@ -92,8 +92,14 @@
         <propertykey name="package" waitX="2">
           <value>パッケージ</value>
         </propertykey>
+        <propertykey name="generic" waitX="2">
+          <value>総称型</value>
+        </propertykey>
         <propertykey name="annotation" waitX="2">
           <value>アノテーション</value>
+        </propertykey>
+        <propertykey name="annotationJava" waitX="2">
+          <value>アノテーション(Java)</value>
         </propertykey>
         <propertykey name="description" waitX="2">
           <value>説明</value>
@@ -160,10 +166,30 @@
         <tablecolumn name="default">
           <value>デフォルト</value>
         </tablecolumn>
+        <tablecolumn name="typeJava">
+          <value>型(Java)</value>
+        </tablecolumn>
+        <tablecolumn name="genericJava">
+          <value>総称型(Java)</value>
+        </tablecolumn>
+        <tablecolumn name="annotationKt">
+          <value>アノテーション(Java)</value>
+        </tablecolumn>
+        <tablecolumn name="defaultJava">
+          <value>デフォルト(Java)</value>
+        </tablecolumn>
+        <tablecolumn name="abstract">
+          <value>abstract</value>
+        </tablecolumn>
+        <tablecolumn name="required">
+          <value>必須</value>
+        </tablecolumn>
+        <tablecolumn name="fixedValue">
+          <value>変更不可変数</value>
+        </tablecolumn>
         <tablecolumn name="description">
           <value>説明</value>
         </tablecolumn>
-
       </tableblock>
 
     </blancocalcparser>

@@ -122,6 +122,20 @@ public class BlancoValueObjectClassStructure {
     private String fFileDescription;
 
     /**
+     * パッケージ名の後ろに付加する文字列をしていします。
+     *
+     * フィールド: [packageSuffix]。
+     */
+    private String fPackageSuffix;
+
+    /**
+     * 定義書で指定されたパッケージ名を上書きします。
+     *
+     * フィールド: [overridePackage]。
+     */
+    private String fOverridePackage;
+
+    /**
      * フィールド [name] の値を設定します。
      *
      * フィールドの説明: [フィールド名を指定します。必須項目です。]。
@@ -462,6 +476,50 @@ public class BlancoValueObjectClassStructure {
     }
 
     /**
+     * フィールド [packageSuffix] の値を設定します。
+     *
+     * フィールドの説明: [パッケージ名の後ろに付加する文字列をしていします。]。
+     *
+     * @param argPackageSuffix フィールド[packageSuffix]に設定する値。
+     */
+    public void setPackageSuffix(final String argPackageSuffix) {
+        fPackageSuffix = argPackageSuffix;
+    }
+
+    /**
+     * フィールド [packageSuffix] の値を取得します。
+     *
+     * フィールドの説明: [パッケージ名の後ろに付加する文字列をしていします。]。
+     *
+     * @return フィールド[packageSuffix]から取得した値。
+     */
+    public String getPackageSuffix() {
+        return fPackageSuffix;
+    }
+
+    /**
+     * フィールド [overridePackage] の値を設定します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名を上書きします。]。
+     *
+     * @param argOverridePackage フィールド[overridePackage]に設定する値。
+     */
+    public void setOverridePackage(final String argOverridePackage) {
+        fOverridePackage = argOverridePackage;
+    }
+
+    /**
+     * フィールド [overridePackage] の値を取得します。
+     *
+     * フィールドの説明: [定義書で指定されたパッケージ名を上書きします。]。
+     *
+     * @return フィールド[overridePackage]から取得した値。
+     */
+    public String getOverridePackage() {
+        return fOverridePackage;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -491,6 +549,8 @@ public class BlancoValueObjectClassStructure {
         buf.append(",implementsList=" + fImplementsList);
         buf.append(",fieldList=" + fFieldList);
         buf.append(",fileDescription=" + fFileDescription);
+        buf.append(",packageSuffix=" + fPackageSuffix);
+        buf.append(",overridePackage=" + fOverridePackage);
         buf.append("]");
         return buf.toString();
     }
@@ -598,5 +658,11 @@ public class BlancoValueObjectClassStructure {
         // Name: fFileDescription
         // Type: java.lang.String
         target.fFileDescription = this.fFileDescription;
+        // Name: fPackageSuffix
+        // Type: java.lang.String
+        target.fPackageSuffix = this.fPackageSuffix;
+        // Name: fOverridePackage
+        // Type: java.lang.String
+        target.fOverridePackage = this.fOverridePackage;
     }
 }

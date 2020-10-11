@@ -1,7 +1,7 @@
 /*
  * blanco Framework
  * Copyright (C) 2004-2010 IGA Tosiki
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -26,6 +26,7 @@ import blanco.valueobject.message.BlancoValueObjectMessage;
 import blanco.valueobject.resourcebundle.BlancoValueObjectResourceBundle;
 import blanco.valueobject.valueobject.BlancoValueObjectClassStructure;
 import blanco.valueobject.valueobject.BlancoValueObjectFieldStructure;
+import blanco.xml.bind.BlancoXmlBindingUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,9 @@ import java.util.List;
 
 /**
  * バリューオブジェクト用中間XMLファイルから Javaソースコードを自動生成するクラス。
- * 
+ *
  * blancoValueObjectの主たるクラスのひとつです。
- * 
+ *
  * @author IGA Tosiki
  */
 public class BlancoValueObjectXml2JavaClass {
@@ -109,7 +110,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * バリューオブジェクトを表現する中間XMLファイルから、Javaソースコードを自動生成します。
-     * 
+     *
      * @param argMetaXmlSourceFile
      *            ValueObjectに関するメタ情報が含まれているXMLファイル
      * @param argDirectoryTarget
@@ -130,7 +131,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * 与えられたクラス情報バリューオブジェクトから、ソースコードを自動生成します。
-     * 
+     *
      * @param argClassStructure
      *            クラス情報
      * @param argDirectoryTarget
@@ -163,8 +164,21 @@ public class BlancoValueObjectXml2JavaClass {
         // BlancoCgObjectFactoryクラスのインスタンスを取得します。
         fCgFactory = BlancoCgObjectFactory.getInstance();
 
-        fCgSourceFile = fCgFactory.createSourceFile(argClassStructure
-                .getPackage(), null);
+        // パッケージ名の置き換えオプションが指定されていれば置き換え
+        // Suffix があればそちらが優先です。
+        String packageName = argClassStructure.getPackage();
+        if (BlancoValueObjectUtil.packageSuffix != null && BlancoValueObjectUtil.packageSuffix.length() > 0) {
+            if (BlancoStringUtil.null2Blank(packageName).length() > 0) {
+                packageName += ".";
+            } else {
+                packageName = "";
+            }
+            packageName += BlancoValueObjectUtil.packageSuffix;
+        } else if (BlancoValueObjectUtil.overridePackage != null && BlancoValueObjectUtil.overridePackage.length() > 0) {
+            packageName = BlancoValueObjectUtil.overridePackage;
+        }
+
+        fCgSourceFile = fCgFactory.createSourceFile(packageName, null);
         fCgSourceFile.setEncoding(fEncoding);
 
         // クラスを作成します。
@@ -260,7 +274,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * クラスにフィールドを生成します。
-     * 
+     *
      * @param argClassStructure
      *            クラス情報。
      * @param argFieldStructure
@@ -362,7 +376,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * setメソッドを生成します。
-     * 
+     *
      * @param argFieldStructure
      *            フィールド情報。
      */
@@ -407,7 +421,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * getメソッドを生成します。
-     * 
+     *
      * @param argFieldStructure
      *            フィールド情報。
      */
@@ -449,7 +463,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * toStringメソッドを生成します。
-     * 
+     *
      * @param argClassStructure
      *            クラス情報。
      */
@@ -521,7 +535,7 @@ public class BlancoValueObjectXml2JavaClass {
 
     /**
      * 調整済みのフィールド名を取得します。
-     * 
+     *
      * @param argFieldStructure
      *            フィールド情報。
      * @return 調整後のフィールド名。
