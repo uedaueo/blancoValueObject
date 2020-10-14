@@ -426,7 +426,7 @@ public class BlancoValueObjectXmlParser {
         /* クラスの annotation に対応, (Java) があればそちらを優先 */
         String classAnnotation = BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "annotationJava");
-        if (BlancoStringUtil.null2Blank(classAnnotation).length() == 0) {
+        if (BlancoStringUtil.null2Blank(classAnnotation).length() == 0 && !BlancoValueObjectUtil.ignoreAnnotation) {
             classAnnotation = BlancoXmlBindingUtil.getTextContent(
                     argElementCommon, "annotation");
         }
@@ -642,7 +642,7 @@ public class BlancoValueObjectXmlParser {
 
             /* Java の annnotation があればそちらを優先 */
             String javaAnnotation = BlancoXmlBindingUtil.getTextContent(elementList, "annotationJava");
-            if (BlancoStringUtil.null2Blank(javaAnnotation).length() == 0) {
+            if (BlancoStringUtil.null2Blank(javaAnnotation).length() == 0 && !BlancoValueObjectUtil.ignoreAnnotation) {
                 String phpAnnotation = BlancoXmlBindingUtil.getTextContent(elementList, "annotation");
                 if (BlancoStringUtil.null2Blank(phpAnnotation).length() != 0) {
                     javaAnnotation = phpAnnotation;
@@ -683,10 +683,13 @@ public class BlancoValueObjectXmlParser {
                 }
             }
 
-            // Java 向け default 値があればそちらを優先
+            /*
+             * Java 向け default 値があればそちらを優先。
+             * ignoreDefault が指定されている場合も java 向け default は有効
+             */
             String javaDefault = BlancoXmlBindingUtil.getTextContent(
                     elementList, "defaultJava");
-            if (BlancoStringUtil.null2Blank(javaDefault).length() == 0) {
+            if (BlancoStringUtil.null2Blank(javaDefault).length() == 0 && !BlancoValueObjectUtil.ignoreDefault) {
                 String phpDefault = BlancoXmlBindingUtil.getTextContent(
                         elementList, "default");
                 if (BlancoStringUtil.null2Blank(phpDefault).length() != 0) {

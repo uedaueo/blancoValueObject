@@ -94,6 +94,16 @@ public class BlancoValueObjectTask extends Task {
     protected boolean fIsFieldVoOverridePackageProcessed = false;
 
     /**
+     * フィールド [ignoreDefault] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldIgnoreDefaultProcessed = false;
+
+    /**
+     * フィールド [ignoreAnnotation] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldIgnoreAnnotationProcessed = false;
+
+    /**
      * verboseモードで動作させるかどうか。
      *
      * @param arg verboseモードで動作させるかどうか。
@@ -444,6 +454,58 @@ public class BlancoValueObjectTask extends Task {
     }
 
     /**
+     * Antタスクの[ignoreDefault]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 14<br>
+     * Java向け以外のデフォルト値を無視します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setIgnoreDefault(final boolean arg) {
+        fInput.setIgnoreDefault(arg);
+        fIsFieldIgnoreDefaultProcessed = true;
+    }
+
+    /**
+     * Antタスクの[ignoreDefault]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 14<br>
+     * Java向け以外のデフォルト値を無視します。<br>
+     * デフォルト値[false]が設定されています。Apache Antタスク上でアトリビュートの指定が無い場合には、デフォルト値が設定されます。<br>
+     *
+     * @return このフィールドの値
+     */
+    public boolean getIgnoreDefault() {
+        return fInput.getIgnoreDefault();
+    }
+
+    /**
+     * Antタスクの[ignoreAnnotation]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 15<br>
+     * Java向け以外のアノテーションを無視します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setIgnoreAnnotation(final boolean arg) {
+        fInput.setIgnoreAnnotation(arg);
+        fIsFieldIgnoreAnnotationProcessed = true;
+    }
+
+    /**
+     * Antタスクの[ignoreAnnotation]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 15<br>
+     * Java向け以外のアノテーションを無視します。<br>
+     * デフォルト値[false]が設定されています。Apache Antタスク上でアトリビュートの指定が無い場合には、デフォルト値が設定されます。<br>
+     *
+     * @return このフィールドの値
+     */
+    public boolean getIgnoreAnnotation() {
+        return fInput.getIgnoreAnnotation();
+    }
+
+    /**
      * Antタスクのメイン処理。Apache Antから このメソッドが呼び出されます。
      *
      * @throws BuildException タスクとしての例外が発生した場合。
@@ -472,6 +534,8 @@ public class BlancoValueObjectTask extends Task {
             System.out.println("- searchTmpdir:[" + getSearchTmpdir() + "]");
             System.out.println("- voPackageSuffix:[" + getVoPackageSuffix() + "]");
             System.out.println("- voOverridePackage:[" + getVoOverridePackage() + "]");
+            System.out.println("- ignoreDefault:[" + getIgnoreDefault() + "]");
+            System.out.println("- ignoreAnnotation:[" + getIgnoreAnnotation() + "]");
         }
 
         try {

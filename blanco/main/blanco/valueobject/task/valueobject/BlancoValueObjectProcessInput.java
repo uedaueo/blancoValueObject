@@ -110,6 +110,22 @@ public class BlancoValueObjectProcessInput {
     private String fVoOverridePackage;
 
     /**
+     * Java向け以外のデフォルト値を無視します。
+     *
+     * フィールド: [ignoreDefault]。
+     * デフォルト: [false]。
+     */
+    private boolean fIgnoreDefault = false;
+
+    /**
+     * Java向け以外のアノテーションを無視します。
+     *
+     * フィールド: [ignoreAnnotation]。
+     * デフォルト: [false]。
+     */
+    private boolean fIgnoreAnnotation = false;
+
+    /**
      * フィールド [verbose] の値を設定します。
      *
      * フィールドの説明: [verboseモードで動作させるかどうか。]。
@@ -425,6 +441,52 @@ public class BlancoValueObjectProcessInput {
     }
 
     /**
+     * フィールド [ignoreDefault] の値を設定します。
+     *
+     * フィールドの説明: [Java向け以外のデフォルト値を無視します。]。
+     *
+     * @param argIgnoreDefault フィールド[ignoreDefault]に設定する値。
+     */
+    public void setIgnoreDefault(final boolean argIgnoreDefault) {
+        fIgnoreDefault = argIgnoreDefault;
+    }
+
+    /**
+     * フィールド [ignoreDefault] の値を取得します。
+     *
+     * フィールドの説明: [Java向け以外のデフォルト値を無視します。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[ignoreDefault]から取得した値。
+     */
+    public boolean getIgnoreDefault() {
+        return fIgnoreDefault;
+    }
+
+    /**
+     * フィールド [ignoreAnnotation] の値を設定します。
+     *
+     * フィールドの説明: [Java向け以外のアノテーションを無視します。]。
+     *
+     * @param argIgnoreAnnotation フィールド[ignoreAnnotation]に設定する値。
+     */
+    public void setIgnoreAnnotation(final boolean argIgnoreAnnotation) {
+        fIgnoreAnnotation = argIgnoreAnnotation;
+    }
+
+    /**
+     * フィールド [ignoreAnnotation] の値を取得します。
+     *
+     * フィールドの説明: [Java向け以外のアノテーションを無視します。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[ignoreAnnotation]から取得した値。
+     */
+    public boolean getIgnoreAnnotation() {
+        return fIgnoreAnnotation;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -453,6 +515,8 @@ public class BlancoValueObjectProcessInput {
         buf.append(",searchTmpdir=" + fSearchTmpdir);
         buf.append(",voPackageSuffix=" + fVoPackageSuffix);
         buf.append(",voOverridePackage=" + fVoOverridePackage);
+        buf.append(",ignoreDefault=" + fIgnoreDefault);
+        buf.append(",ignoreAnnotation=" + fIgnoreAnnotation);
         buf.append("]");
         return buf.toString();
     }
@@ -517,5 +581,11 @@ public class BlancoValueObjectProcessInput {
         // Name: fVoOverridePackage
         // Type: java.lang.String
         target.fVoOverridePackage = this.fVoOverridePackage;
+        // Name: fIgnoreDefault
+        // Type: boolean
+        target.fIgnoreDefault = this.fIgnoreDefault;
+        // Name: fIgnoreAnnotation
+        // Type: boolean
+        target.fIgnoreAnnotation = this.fIgnoreAnnotation;
     }
 }

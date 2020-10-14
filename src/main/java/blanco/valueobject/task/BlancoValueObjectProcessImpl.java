@@ -130,6 +130,8 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
             BlancoValueObjectUtil.overridePackage = input.getOverridePackage();
             BlancoValueObjectUtil.voPackageSuffix = input.getVoPackageSuffix();
             BlancoValueObjectUtil.voOverridePackage = input.getVoOverridePackage();
+            BlancoValueObjectUtil.ignoreDefault = input.getIgnoreDefault();
+            BlancoValueObjectUtil.ignoreAnnotation = input.getIgnoreAnnotation();
 
             for (int index = 0; index < fileMeta2.length; index++) {
                 if (fileMeta2[index].getName().endsWith(".xml") == false) {

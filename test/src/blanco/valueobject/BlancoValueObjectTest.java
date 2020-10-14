@@ -65,4 +65,28 @@ public class BlancoValueObjectTest {
         }
     }
 
+    @Test
+    public void testIgnoreDefaultTest() {
+        // ignoreDefault のテスト
+        BlancoValueObjectProcessInput input = new BlancoValueObjectProcessInput();
+        input.setMetadir("meta/objects3");
+        input.setEncoding("UTF-8");
+        input.setSheetType("php");
+        input.setTmpdir("tmpTest3");
+        input.setTargetdir("sample/blanco");
+        input.setTargetStyle("maven");
+        input.setVerbose(true);
+        input.setLineSeparator("LF");
+        input.setPackageSuffix("blanco");
+        input.setSearchTmpdir("tmpTest");
+        input.setVoPackageSuffix("blanco");
+        input.setIgnoreDefault(true);
+
+        BlancoValueObjectProcessImpl imple = new BlancoValueObjectProcessImpl();
+        try {
+            imple.execute(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

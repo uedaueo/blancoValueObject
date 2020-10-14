@@ -79,6 +79,10 @@ public class BlancoValueObjectBatchProcess {
                 input.setVoPackageSuffix(arg.substring(17));
             } else if (arg.startsWith("-voOverridePackage=")) {
                 input.setVoOverridePackage(arg.substring(19));
+            } else if (arg.startsWith("-ignoreDefault=")) {
+                input.setIgnoreDefault(Boolean.valueOf(arg.substring(15)).booleanValue());
+            } else if (arg.startsWith("-ignoreAnnotation=")) {
+                input.setIgnoreAnnotation(Boolean.valueOf(arg.substring(18)).booleanValue());
             } else if (arg.equals("-?") || arg.equals("-help")) {
                 usage();
                 System.exit(END_SUCCESS);
@@ -172,7 +176,7 @@ public class BlancoValueObjectBatchProcess {
      */
     public static final void usage() {
         System.out.println("BlancoValueObjectBatchProcess: Usage:");
-        System.out.println("  java blanco.valueobject.task.BlancoValueObjectBatchProcess -verbose=値1 -metadir=値2 -targetdir=値3 -tmpdir=値4 -encoding=値5 -xmlrootelement=値6 -sheetType=値7 -targetStyle=値8 -lineSeparator=値9 -packageSuffix=値10 -overridePackage=値11 -searchTmpdir=値12 -voPackageSuffix=値13 -voOverridePackage=値14");
+        System.out.println("  java blanco.valueobject.task.BlancoValueObjectBatchProcess -verbose=値1 -metadir=値2 -targetdir=値3 -tmpdir=値4 -encoding=値5 -xmlrootelement=値6 -sheetType=値7 -targetStyle=値8 -lineSeparator=値9 -packageSuffix=値10 -overridePackage=値11 -searchTmpdir=値12 -voPackageSuffix=値13 -voOverridePackage=値14 -ignoreDefault=値15 -ignoreAnnotation=値16");
         System.out.println("    -verbose");
         System.out.println("      説明[verboseモードで動作させるかどうか。]");
         System.out.println("      型[真偽]");
@@ -223,6 +227,14 @@ public class BlancoValueObjectBatchProcess {
         System.out.println("    -voOverridePackage");
         System.out.println("      説明[packageを探しにいくValueObject定義書を処理する際に指定されていたはずの overridePackage を指定します。]");
         System.out.println("      型[文字列]");
+        System.out.println("    -ignoreDefault");
+        System.out.println("      説明[Java向け以外のデフォルト値を無視します。]");
+        System.out.println("      型[真偽]");
+        System.out.println("      デフォルト値[false]");
+        System.out.println("    -ignoreAnnotation");
+        System.out.println("      説明[Java向け以外のアノテーションを無視します。]");
+        System.out.println("      型[真偽]");
+        System.out.println("      デフォルト値[false]");
         System.out.println("    -? , -help");
         System.out.println("      説明[使い方を表示します。]");
     }
