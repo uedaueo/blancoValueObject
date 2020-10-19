@@ -104,6 +104,11 @@ public class BlancoValueObjectTask extends Task {
     protected boolean fIsFieldIgnoreAnnotationProcessed = false;
 
     /**
+     * フィールド [ignoreImport] に値がセットされたかどうか。
+     */
+    protected boolean fIsFieldIgnoreImportProcessed = false;
+
+    /**
      * verboseモードで動作させるかどうか。
      *
      * @param arg verboseモードで動作させるかどうか。
@@ -506,6 +511,32 @@ public class BlancoValueObjectTask extends Task {
     }
 
     /**
+     * Antタスクの[ignoreImport]アトリビュートのセッターメソッド。
+     *
+     * 項目番号: 16<br>
+     * Java向け以外のインポートを無視します。<br>
+     *
+     * @param arg セットしたい値
+     */
+    public void setIgnoreImport(final boolean arg) {
+        fInput.setIgnoreImport(arg);
+        fIsFieldIgnoreImportProcessed = true;
+    }
+
+    /**
+     * Antタスクの[ignoreImport]アトリビュートのゲッターメソッド。
+     *
+     * 項目番号: 16<br>
+     * Java向け以外のインポートを無視します。<br>
+     * デフォルト値[false]が設定されています。Apache Antタスク上でアトリビュートの指定が無い場合には、デフォルト値が設定されます。<br>
+     *
+     * @return このフィールドの値
+     */
+    public boolean getIgnoreImport() {
+        return fInput.getIgnoreImport();
+    }
+
+    /**
      * Antタスクのメイン処理。Apache Antから このメソッドが呼び出されます。
      *
      * @throws BuildException タスクとしての例外が発生した場合。
@@ -536,6 +567,7 @@ public class BlancoValueObjectTask extends Task {
             System.out.println("- voOverridePackage:[" + getVoOverridePackage() + "]");
             System.out.println("- ignoreDefault:[" + getIgnoreDefault() + "]");
             System.out.println("- ignoreAnnotation:[" + getIgnoreAnnotation() + "]");
+            System.out.println("- ignoreImport:[" + getIgnoreImport() + "]");
         }
 
         try {

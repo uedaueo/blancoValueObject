@@ -126,6 +126,14 @@ public class BlancoValueObjectProcessInput {
     private boolean fIgnoreAnnotation = false;
 
     /**
+     * Java向け以外のインポートを無視します。
+     *
+     * フィールド: [ignoreImport]。
+     * デフォルト: [false]。
+     */
+    private boolean fIgnoreImport = false;
+
+    /**
      * フィールド [verbose] の値を設定します。
      *
      * フィールドの説明: [verboseモードで動作させるかどうか。]。
@@ -487,6 +495,29 @@ public class BlancoValueObjectProcessInput {
     }
 
     /**
+     * フィールド [ignoreImport] の値を設定します。
+     *
+     * フィールドの説明: [Java向け以外のインポートを無視します。]。
+     *
+     * @param argIgnoreImport フィールド[ignoreImport]に設定する値。
+     */
+    public void setIgnoreImport(final boolean argIgnoreImport) {
+        fIgnoreImport = argIgnoreImport;
+    }
+
+    /**
+     * フィールド [ignoreImport] の値を取得します。
+     *
+     * フィールドの説明: [Java向け以外のインポートを無視します。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[ignoreImport]から取得した値。
+     */
+    public boolean getIgnoreImport() {
+        return fIgnoreImport;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -517,6 +548,7 @@ public class BlancoValueObjectProcessInput {
         buf.append(",voOverridePackage=" + fVoOverridePackage);
         buf.append(",ignoreDefault=" + fIgnoreDefault);
         buf.append(",ignoreAnnotation=" + fIgnoreAnnotation);
+        buf.append(",ignoreImport=" + fIgnoreImport);
         buf.append("]");
         return buf.toString();
     }
@@ -587,5 +619,8 @@ public class BlancoValueObjectProcessInput {
         // Name: fIgnoreAnnotation
         // Type: boolean
         target.fIgnoreAnnotation = this.fIgnoreAnnotation;
+        // Name: fIgnoreImport
+        // Type: boolean
+        target.fIgnoreImport = this.fIgnoreImport;
     }
 }

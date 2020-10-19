@@ -18,6 +18,7 @@ public class BlancoValueObjectUtil {
     public static String voOverridePackage = null;
     public static boolean ignoreDefault = false;
     public static boolean ignoreAnnotation = false;
+    public static boolean ignoreImport = false;
 
     public static HashMap<String, BlancoValueObjectClassStructure> objects = new HashMap<>();
 

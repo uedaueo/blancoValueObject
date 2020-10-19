@@ -14,10 +14,7 @@ import blanco.cg.BlancoCgObjectFactory;
 import blanco.cg.BlancoCgSupportedLang;
 import blanco.cg.transformer.BlancoCgTransformerFactory;
 import blanco.cg.util.BlancoCgSourceUtil;
-import blanco.cg.valueobject.BlancoCgClass;
-import blanco.cg.valueobject.BlancoCgField;
-import blanco.cg.valueobject.BlancoCgMethod;
-import blanco.cg.valueobject.BlancoCgSourceFile;
+import blanco.cg.valueobject.*;
 import blanco.commons.util.BlancoJavaSourceUtil;
 import blanco.commons.util.BlancoNameAdjuster;
 import blanco.commons.util.BlancoNameUtil;
@@ -295,6 +292,9 @@ public class BlancoValueObjectXml2JavaClass {
                 + getFieldNameAdjustered(argClassStructure, argFieldStructure),
                 argFieldStructure.getType(), null);
         fCgClass.getFieldList().add(field);
+        if (BlancoStringUtil.null2Blank(argFieldStructure.getGeneric()).length() > 0) {
+            field.getType().setGenerics(argFieldStructure.getGeneric());
+        }
 
         // フィールドのJavaDocを設定します。
         field.setDescription(argFieldStructure.getDescription());
@@ -400,13 +400,16 @@ public class BlancoValueObjectXml2JavaClass {
             method.getLangDoc().getDescriptionList().add(line);
         }
 
-        method.getParameterList().add(
-                fCgFactory.createParameter("arg"
+        BlancoCgParameter cgParameter = fCgFactory.createParameter("arg"
                         + getFieldNameAdjustered(argClassStructure,
-                                argFieldStructure),
-                        argFieldStructure.getType(),
-                        fBundle.getXml2javaclassSetArgJavadoc(argFieldStructure
-                                .getName())));
+                argFieldStructure),
+                argFieldStructure.getType(),
+                fBundle.getXml2javaclassSetArgJavadoc(argFieldStructure
+                        .getName()));
+        method.getParameterList().add(cgParameter);
+        if (BlancoStringUtil.null2Blank(argFieldStructure.getGeneric()).length() > 0) {
+            cgParameter.getType().setGenerics(argFieldStructure.getGeneric());
+        }
 
         // メソッドの実装
         method.getLineList().add(
@@ -450,9 +453,11 @@ public class BlancoValueObjectXml2JavaClass {
                             .getDefault())));
         }
 
-        method.setReturn(fCgFactory.createReturn(argFieldStructure.getType(),
-                fBundle.getXml2javaclassGetReturnJavadoc(argFieldStructure
-                        .getName())));
+        BlancoCgReturn cgReturn = fCgFactory.createReturn(argFieldStructure.getType(), fBundle.getXml2javaclassGetReturnJavadoc(argFieldStructure.getName()));
+        method.setReturn(cgReturn);
+        if (BlancoStringUtil.null2Blank(argFieldStructure.getGeneric()).length() > 0) {
+            cgReturn.getType().setGenerics(argFieldStructure.getGeneric());
+        }
 
         // メソッドの実装
         method.getLineList().add(

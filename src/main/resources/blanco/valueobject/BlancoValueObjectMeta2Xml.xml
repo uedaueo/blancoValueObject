@@ -58,6 +58,19 @@
 
       </tableblock>
 
+
+      <tableblock name="blancovalueobject-import" waitY="2" titleheight="2" rowname="import">
+        <startstring>バリューオブジェクト定義・インポート</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>インポートクラス名</value>
+        </tablecolumn>
+
+      </tableblock>
+
       <tableblock name="blancovalueobject-list" waitY="2" titleheight="3" rowname="field">
         <startstring>バリューオブジェクト定義・一覧</startstring>
 

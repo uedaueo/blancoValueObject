@@ -368,9 +368,14 @@ public class BlancoValueObjectXmlParser {
             parseInterfacePhp(elementInterfaceRoot, objClassStructure);
         }
 
-        /* import の一覧作成 */
-        final List<BlancoXmlElement> importList = BlancoXmlBindingUtil
-                .getElementsByTagName(argElementSheet, "blancovalueobjectphp-import");
+        /* import の一覧作成, java用があればそちらを優先 */
+
+        List<BlancoXmlElement> importList = BlancoXmlBindingUtil
+                .getElementsByTagName(argElementSheet, "blancovalueobject-import");
+        if (!BlancoValueObjectUtil.ignoreImport && (importList == null || importList.size() == 0)) {
+            importList = BlancoXmlBindingUtil
+                    .getElementsByTagName(argElementSheet, "blancovalueobjectphp-import");
+        }
         if (importList != null && importList.size() != 0) {
             final BlancoXmlElement elementImportRoot = importList.get(0);
             parseImportListPhp(elementImportRoot, objClassStructure);
@@ -526,7 +531,7 @@ public class BlancoValueObjectXmlParser {
             final BlancoValueObjectClassStructure argClassStructure
     ) {
         final List<BlancoXmlElement> listInterfaceChildNodes = BlancoXmlBindingUtil
-                .getElementsByTagName(argElementInterfaceRoot, "import");
+                .getElementsByTagName(argElementInterfaceRoot, "interface");
         for (int index = 0; index < listInterfaceChildNodes.size(); index++) {
             final BlancoXmlElement elementList = listInterfaceChildNodes
                     .get(index);
