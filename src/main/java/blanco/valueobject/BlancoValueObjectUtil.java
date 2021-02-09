@@ -199,7 +199,9 @@ public class BlancoValueObjectUtil {
                 }
 
                 /* その他はそのまま記述する */
-                System.out.println("/* tueda */ Unknown php type: " + javaType);
+                if (isVerbose) {
+                    System.out.println("/* tueda */ Unknown php type: " + javaType);
+                }
             }
         }
         return javaType;
