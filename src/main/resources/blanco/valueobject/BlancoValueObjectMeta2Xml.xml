@@ -58,17 +58,24 @@
 
       </tableblock>
 
-
       <tableblock name="blancovalueobject-import" waitY="2" titleheight="2" rowname="import">
         <startstring>バリューオブジェクト定義・インポート</startstring>
-
         <tablecolumn name="no">
           <value>No.</value>
         </tablecolumn>
         <tablecolumn name="name">
           <value>インポートクラス名</value>
         </tablecolumn>
+      </tableblock>
 
+      <tableblock name="blancovalueobject-import" waitY="2" titleheight="2" rowname="import">
+        <startstring>バリューオブジェクト定義(Java)・インポート</startstring>
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="name">
+          <value>インポートクラス名</value>
+        </tablecolumn>
       </tableblock>
 
       <tableblock name="blancovalueobject-list" waitY="2" titleheight="3" rowname="field">
@@ -148,14 +155,12 @@
 
       <tableblock name="blancovalueobjectphp-import" waitY="2" titleheight="2" rowname="import">
       <startstring>バリューオブジェクト定義(php)・インポート</startstring>
-
       <tablecolumn name="no">
         <value>No.</value>
       </tablecolumn>
       <tablecolumn name="name">
         <value>インポートクラス名</value>
       </tablecolumn>
-
       </tableblock>
 
       <tableblock name="blancovalueobjectphp-list" waitY="2" titleheight="3" rowname="field">
@@ -185,7 +190,7 @@
         <tablecolumn name="genericJava">
           <value>総称型(Java)</value>
         </tablecolumn>
-        <tablecolumn name="annotationKt">
+        <tablecolumn name="annotationJava">
           <value>アノテーション(Java)</value>
         </tablecolumn>
         <tablecolumn name="defaultJava">

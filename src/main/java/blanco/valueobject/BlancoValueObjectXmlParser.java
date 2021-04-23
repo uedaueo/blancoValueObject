@@ -368,8 +368,7 @@ public class BlancoValueObjectXmlParser {
             parseInterfacePhp(elementInterfaceRoot, objClassStructure);
         }
 
-        /* import の一覧作成, java用があればそちらを優先 */
-
+        /* Create import List, prefer for java, or for java only if ignoreImport is specified. */
         List<BlancoXmlElement> importList = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet, "blancovalueobject-import");
         if (!BlancoValueObjectUtil.ignoreImport && (importList == null || importList.size() == 0)) {
@@ -428,7 +427,7 @@ public class BlancoValueObjectXmlParser {
             }
         }
 
-        /* クラスの annotation に対応, (Java) があればそちらを優先 */
+        /* Class annotation, prefer for java, or java only if ignoreAnnotation is specified. */
         String classAnnotation = BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "annotationJava");
         if (BlancoStringUtil.null2Blank(classAnnotation).length() == 0 && !BlancoValueObjectUtil.ignoreAnnotation) {
@@ -645,7 +644,7 @@ public class BlancoValueObjectXmlParser {
                 fieldStructure.setGeneric(javaGeneric);
             }
 
-            /* Java の annnotation があればそちらを優先 */
+            /* Create method annotation, prefer java or javaOnly if ignoreAnnotation is specified. */
             String javaAnnotation = BlancoXmlBindingUtil.getTextContent(elementList, "annotationJava");
             if (BlancoStringUtil.null2Blank(javaAnnotation).length() == 0 && !BlancoValueObjectUtil.ignoreAnnotation) {
                 String phpAnnotation = BlancoXmlBindingUtil.getTextContent(elementList, "annotation");
