@@ -30,25 +30,25 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * バリューオブジェクト用中間XMLファイルから Javaソースコードを自動生成するクラス。
+ * A class that auto-generates Java source code from intermediate XML files for value objects.
  *
- * blancoValueObjectの主たるクラスのひとつです。
+ * This is one of the main classes of blancoValueObject.
  *
  * @author IGA Tosiki
  */
 public class BlancoValueObjectXml2JavaClass {
     /**
-     * メッセージ。
+     * A message.
      */
     private final BlancoValueObjectMessage fMsg = new BlancoValueObjectMessage();
 
     /**
-     * blancoValueObjectのリソースバンドルオブジェクト。
+     * Resource bundle object for blancoValueObject.
      */
     private final BlancoValueObjectResourceBundle fBundle = new BlancoValueObjectResourceBundle();
 
     /**
-     * 入力シートに期待するプログラミング言語
+     * A programming language expected for the input sheet.
      */
     private int fSheetLang = BlancoCgSupportedLang.JAVA;
 
@@ -57,7 +57,7 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * ソースコード生成先ディレクトリのスタイル
+     * Style of the source code generation destination directory
      */
     private boolean fTargetStyleAdvanced = false;
     public void setTargetStyleAdvanced(boolean argTargetStyleAdvanced) {
@@ -76,22 +76,22 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * 内部的に利用するblancoCg用ファクトリ。
+     * A factory for blancoCg to be used internally.
      */
     private BlancoCgObjectFactory fCgFactory = null;
 
     /**
-     * 内部的に利用するblancoCg用ソースファイル情報。
+     * Source file information for blancoCg to be used internally.
      */
     private BlancoCgSourceFile fCgSourceFile = null;
 
     /**
-     * 内部的に利用するblancoCg用クラス情報。
+     * Class information for blancoCg to be used internally.
      */
     private BlancoCgClass fCgClass = null;
 
     /**
-     * 自動生成するソースファイルの文字エンコーディング。
+     * Character encoding of auto-generated source files.
      */
     private String fEncoding = null;
 
@@ -106,14 +106,14 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * バリューオブジェクトを表現する中間XMLファイルから、Javaソースコードを自動生成します。
+     * Auto-generates Java source code from an intermediate XML file representing a value object.
      *
      * @param argMetaXmlSourceFile
-     *            ValueObjectに関するメタ情報が含まれているXMLファイル
+     *            An XML file containing meta-information about the ValueObject.
      * @param argDirectoryTarget
-     *            ソースコード生成先ディレクトリ
+     *            Source code generation destination directory.
      * @throws IOException
-     *             入出力例外が発生した場合
+     *             If an I/O exception occurs.
      */
     public void process(final File argMetaXmlSourceFile,
             final File argDirectoryTarget) throws IOException {
@@ -121,29 +121,27 @@ public class BlancoValueObjectXml2JavaClass {
         parser.setVerbose(this.isVerbose());
         final BlancoValueObjectClassStructure[] structures = parser.parse(argMetaXmlSourceFile);
         for (int index = 0; index < structures.length; index++) {
-            // 得られた情報からJavaソースコードを生成します。
+            // Generates Java source code from the obtained information.
             structure2Source(structures[index], argDirectoryTarget);
         }
     }
 
     /**
-     * 与えられたクラス情報バリューオブジェクトから、ソースコードを自動生成します。
+     * Auto-generates source code from a given class information value object.
      *
      * @param argClassStructure
-     *            クラス情報
+     *            Class information.
      * @param argDirectoryTarget
-     *            Javaソースコードの出力先ディレクトリ
+     *            Output directory for TypeScript source code.
      * @throws IOException
-     *             入出力例外が発生した場合。
+     *             If an I/O exception occurs.
      */
     public void structure2Source(
             final BlancoValueObjectClassStructure argClassStructure,
             final File argDirectoryTarget) throws IOException {
         /*
-         * 出力ディレクトリはant taskのtargetStyel引数で
-         * 指定された書式で出力されます。
-         * 従来と互換性を保つために、指定がない場合は blanco/main
-         * となります。
+         * The output directory will be in the format specified by the targetStyle argument of the ant task.
+         * For compatibility, the output directory will be blanco/main if it is not specified.
          * by tueda, 2019/08/30
          */
         String strTarget = argDirectoryTarget
@@ -158,11 +156,11 @@ public class BlancoValueObjectXml2JavaClass {
             System.out.println("/* tueda */ structure2Source argDirectoryTarget : " + argDirectoryTarget.getAbsolutePath());
         }
 
-        // BlancoCgObjectFactoryクラスのインスタンスを取得します。
+        // Gets an instance of the BlancoCgObjectFactory class.
         fCgFactory = BlancoCgObjectFactory.getInstance();
 
-        // パッケージ名の置き換えオプションが指定されていれば置き換え
-        // Suffix があればそちらが優先です。
+        // Replace the package name if the Replace option is specified.
+        // If Suffix is present, it takes precedence.
         String packageName = argClassStructure.getPackage();
         if (BlancoValueObjectUtil.packageSuffix != null && BlancoValueObjectUtil.packageSuffix.length() > 0) {
             if (BlancoStringUtil.null2Blank(packageName).length() > 0) {
@@ -178,22 +176,22 @@ public class BlancoValueObjectXml2JavaClass {
         fCgSourceFile = fCgFactory.createSourceFile(packageName, null);
         fCgSourceFile.setEncoding(fEncoding);
 
-        // クラスを作成します。
+        // Creates a class.
         fCgClass = fCgFactory.createClass(argClassStructure.getName(), "");
         fCgSourceFile.getClassList().add(fCgClass);
 
-        // クラスのアクセスを設定。
+        // Sets access to the class.
         fCgClass.setAccess(argClassStructure.getAccess());
-        // 抽象クラスかどうか。
+        // Abstract class or not.
         fCgClass.setAbstract(argClassStructure.getAbstract());
 
-        // 継承
+        // Inheritance
         if (BlancoStringUtil.null2Blank(argClassStructure.getExtends())
                 .length() > 0) {
             fCgClass.getExtendClassList().add(
                     fCgFactory.createType(argClassStructure.getExtends()));
         }
-        // 実装
+        // Implementation
         for (int index = 0; index < argClassStructure.getImplementsList()
                 .size(); index++) {
             final String impl = (String) argClassStructure.getImplementsList()
@@ -208,13 +206,13 @@ public class BlancoValueObjectXml2JavaClass {
                     "javax.xml.bind.annotation.XmlRootElement");
         }
 
-        // クラスのJavaDocを設定します。
+        // Sets the JavaDoc for the class.
         fCgClass.setDescription(argClassStructure.getDescription());
         for (String line : argClassStructure.getDescriptionList()) {
             fCgClass.getLangDoc().getDescriptionList().add(line);
         }
 
-        /* クラスのannotation を設定します */
+        /* Sets the annotation for the class. */
         List annotationList = argClassStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
             fCgClass.getAnnotationList().addAll(argClassStructure.getAnnotationList());
@@ -222,7 +220,7 @@ public class BlancoValueObjectXml2JavaClass {
             System.out.println("/* tueda */ structure2Source : class annotation = " + argClassStructure.getAnnotationList().get(0));
         }
 
-        /* クラスの import を設定します */
+        /* Sets the import for the class. */
         for (int index = 0; index < argClassStructure.getImportList()
                 .size(); index++) {
             final String imported = (String) argClassStructure.getImportList()
@@ -232,11 +230,11 @@ public class BlancoValueObjectXml2JavaClass {
 
         for (int indexField = 0; indexField < argClassStructure.getFieldList()
                 .size(); indexField++) {
-            // おのおののフィールドを処理します。
+            // Processes each field.
             final BlancoValueObjectFieldStructure fieldStructure = (BlancoValueObjectFieldStructure) argClassStructure
                     .getFieldList().get(indexField);
 
-            // 必須項目が未設定の場合には例外処理を実施します。
+            // If a required field is not set, exception processing will be performed.
             if (fieldStructure.getName() == null) {
                 throw new IllegalArgumentException(fMsg
                         .getMbvoji03(argClassStructure.getName()));
@@ -246,36 +244,36 @@ public class BlancoValueObjectXml2JavaClass {
                         argClassStructure.getName(), fieldStructure.getName()));
             }
 
-            // フィールドの生成。
+            // Generates a field.
             buildField(argClassStructure, fieldStructure);
 
-            // セッターメソッドの生成。
+            // Generates a setter method.
             buildMethodSet(argClassStructure, fieldStructure);
 
-            // ゲッターメソッドの生成。
+            // Generates a getter method.
             buildMethodGet(argClassStructure, fieldStructure);
         }
 
         if (argClassStructure.getGenerateToString()) {
-            // toStringメソッドの生成。
+            // Generates toString method.
             buildMethodToString(argClassStructure);
         }
 
-        // TODO copyTo メソッドの生成有無を外部フラグ化するかどうか検討すること。
+        // TODO: Considers whether to externally flag whether to generate copyTo method.
         BlancoBeanUtils.generateCopyToMethod(fCgSourceFile, fCgClass);
 
-        // 収集された情報を元に実際のソースコードを自動生成。
+        // Auto-generates the actual source code based on the collected information.
         BlancoCgTransformerFactory.getJavaSourceTransformer().transform(
                 fCgSourceFile, fileBlancoMain);
     }
 
     /**
-     * クラスにフィールドを生成します。
+     * Generates a field in the class.
      *
      * @param argClassStructure
-     *            クラス情報。
+     *            Class information.
      * @param argFieldStructure
-     *            フィールド情報。
+     *            Field information.
      */
     private void buildField(
             final BlancoValueObjectClassStructure argClassStructure,
@@ -285,7 +283,7 @@ public class BlancoValueObjectXml2JavaClass {
             case BlancoCgSupportedLang.PHP:
                 if (argFieldStructure.getType() == "java.lang.Integer") argFieldStructure.setType("java.lang.Long");
                 break;
-            /* 対応言語を増やす場合はここに case を追記します */
+            /* If you want to add more languages, add the case here. */
         }
 
         final BlancoCgField field = fCgFactory.createField("f"
@@ -296,7 +294,7 @@ public class BlancoValueObjectXml2JavaClass {
             field.getType().setGenerics(argFieldStructure.getGeneric());
         }
 
-        // フィールドのJavaDocを設定します。
+        // Sets the JavaDoc for the field.
         field.setDescription(argFieldStructure.getDescription());
         for (String line : argFieldStructure.getDescriptionList()) {
             field.getLangDoc().getDescriptionList().add(line);
@@ -309,7 +307,7 @@ public class BlancoValueObjectXml2JavaClass {
 
             if (type.equals("java.util.Date")) {
                 /*
-                 * java.util.Date 型ではデフォルト値を許容しません。
+                 * java.util.Date type does not allow default values.
                  */
                 throw new IllegalArgumentException(fMsg.getMbvoji05(
                         argClassStructure.getName(), argFieldStructure
@@ -317,17 +315,17 @@ public class BlancoValueObjectXml2JavaClass {
                         type));
             }
 
-            // フィールドのデフォルト値を設定します。
+            // Sets the default value for the field.
             field.getLangDoc().getDescriptionList().add(
                     BlancoCgSourceUtil.escapeStringAsLangDoc(BlancoCgSupportedLang.JAVA, fBundle.getXml2javaclassFieldDefault(argFieldStructure
                             .getDefault())));
             if (argClassStructure.getAdjustDefaultValue() == false) {
-                // デフォルト値の変形がoffの場合には、定義書上の値をそのまま採用。
+                // If the variant of the default value is off, the value on the definition sheet is adopted as it is.
                 field.setDefault(argFieldStructure.getDefault());
             } else {
 
                 if (type.equals("java.lang.String")) {
-                    // ダブルクオートを付与します。
+                    // Adds double-quotes.
                     field.setDefault("\""
                             + BlancoJavaSourceUtil
                                     .escapeStringAsJavaSource(argFieldStructure
@@ -348,13 +346,13 @@ public class BlancoValueObjectXml2JavaClass {
                             + ")");
                 } else if (type.equals("java.math.BigDecimal")) {
                     fCgSourceFile.getImportList().add("java.math.BigDecimal");
-                    // 文字列からBigDecimalへと変換します。
+                    // Converts a string to BigDecimal.
                     field.setDefault("new BigDecimal(\""
                             + argFieldStructure.getDefault() + "\")");
                 } else if (type.equals("java.util.List")
                         || type.equals("java.util.ArrayList")) {
-                    // ArrayListの場合には、与えられた文字をそのまま採用します。
-                    // TODO 第2世代blancoValueObject採用場合には、全クラスインポートが妥当。
+                    // In the case of ArrayList, it will adopt the given character as is.
+                    // TODO: In the case of second generation blancoValueObject adoption, all class imports are appropriate.
                     fCgSourceFile.getImportList().add(type);
                     field.setDefault(argFieldStructure.getDefault());
                 } else {
@@ -366,7 +364,7 @@ public class BlancoValueObjectXml2JavaClass {
             }
         }
 
-        /* メソッドの annotation を設定します */
+        /* Sets the annotation for the method. */
         List annotationList = argFieldStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
             field.getAnnotationList().addAll(annotationList);
@@ -375,22 +373,22 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * setメソッドを生成します。
+     * Generates a set method.
      *
      * @param argFieldStructure
-     *            フィールド情報。
+     *            Field information.
      */
     private void buildMethodSet(
             final BlancoValueObjectClassStructure argClassStructure,
             final BlancoValueObjectFieldStructure argFieldStructure) {
-        // おのおののフィールドに対するセッターメソッドを生成します。
+        // Generates a setter method for each field.
         final BlancoCgMethod method = fCgFactory.createMethod("set"
                 + getFieldNameAdjustered(argClassStructure, argFieldStructure),
                 fBundle.getXml2javaclassSetJavadoc01(argFieldStructure
                         .getName()));
         fCgClass.getMethodList().add(method);
 
-        // メソッドの JavaDoc設定。
+        // JavaDoc configuration of the method.
         if (argFieldStructure.getDescription() != null) {
             method.getLangDoc().getDescriptionList().add(
                     fBundle.getXml2javaclassSetJavadoc02(argFieldStructure
@@ -411,7 +409,7 @@ public class BlancoValueObjectXml2JavaClass {
             cgParameter.getType().setGenerics(argFieldStructure.getGeneric());
         }
 
-        // メソッドの実装
+        // Method implementation.
         method.getLineList().add(
                 "f"
                         + getFieldNameAdjustered(argClassStructure,
@@ -423,22 +421,22 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * getメソッドを生成します。
+     * Generates a get method.
      *
      * @param argFieldStructure
-     *            フィールド情報。
+     *            Field information.
      */
     private void buildMethodGet(
             final BlancoValueObjectClassStructure argClassStructure,
             final BlancoValueObjectFieldStructure argFieldStructure) {
-        // おのおののフィールドに対するゲッターメソッドを生成します。
+        // Generates a getter method for each field.
         final BlancoCgMethod method = fCgFactory.createMethod("get"
                 + getFieldNameAdjustered(argClassStructure, argFieldStructure),
                 fBundle.getXml2javaclassGetJavadoc01(argFieldStructure
                         .getName()));
         fCgClass.getMethodList().add(method);
 
-        // メソッドの JavaDoc設定。
+        // JavaDoc configuration of the method.
         if (argFieldStructure.getDescription() != null) {
             method.getLangDoc().getDescriptionList().add(
                     fBundle.getXml2javaclassGetJavadoc02(argFieldStructure
@@ -459,7 +457,7 @@ public class BlancoValueObjectXml2JavaClass {
             cgReturn.getType().setGenerics(argFieldStructure.getGeneric());
         }
 
-        // メソッドの実装
+        // Method implementation.
         method.getLineList().add(
                 "return f"
                         + getFieldNameAdjustered(argClassStructure,
@@ -467,26 +465,26 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * toStringメソッドを生成します。
+     * Generates toString method.
      *
      * @param argClassStructure
-     *            クラス情報。
+     *            Class information.
      */
     private void buildMethodToString(
             final BlancoValueObjectClassStructure argClassStructure) {
         final BlancoCgMethod method = fCgFactory.createMethod("toString",
-                "このバリューオブジェクトの文字列表現を取得します。");
+                "Gets the string representation of this value object.");
         fCgClass.getMethodList().add(method);
 
-        method.getLangDoc().getDescriptionList().add("<P>使用上の注意</P>");
+        method.getLangDoc().getDescriptionList().add("<P>Precautions for use</P>");
         method.getLangDoc().getDescriptionList().add("<UL>");
         method.getLangDoc().getDescriptionList().add(
-                "<LI>オブジェクトのシャロー範囲のみ文字列化の処理対象となります。");
+                "<LI>Only the shallow range of the object will be subject to the stringification process.");
         method.getLangDoc().getDescriptionList().add(
-                "<LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。");
+                "<LI>Do not use this method if the object has a circular reference.");
         method.getLangDoc().getDescriptionList().add("</UL>");
         method.setReturn(fCgFactory.createReturn("java.lang.String",
-                "バリューオブジェクトの文字列表現。"));
+                "String representation of a value object."));
         method.getAnnotationList().add("Override");
 
         final List<java.lang.String> listLine = method.getLineList();
@@ -508,25 +506,24 @@ public class BlancoValueObjectXml2JavaClass {
                         + field.getName() + "=\" + f" + fieldNameAdjustered
                         + ");");
             } else {
-                // 2006.05.31 t.iga 配列の場合には、先に
-                // その配列自身がnullかどうかのチェックが必要です。
+                // 2006.05.31 t.iga In the case of arrays, it is necessary to first check whether the array itself is null or not.
                 listLine.add("if (f" + fieldNameAdjustered + " == null) {");
-                // 0番目の項目である場合にはカンマなしの特別扱いをします。
+                // If it is the 0th item, it will be given special treatment without a comma.
                 listLine.add("buf.append(" + (indexField == 0 ? "\"" :
-                // 0番目ではない場合には、常にカンマを付与します。
+                // If it is not the 0th, a comma is always given.
                         "\",") + field.getName() + "=null\");");
                 listLine.add("} else {");
 
-                // 配列の場合にはディープにtoStringします。
+                // In the case of arrays, uses deep toString.
                 listLine.add("buf.append("
-                // 0番目の項目である場合にはカンマなしの特別扱いをします。
+                // If it is the 0th item, it will be given special treatment without a comma.
                         + (indexField == 0 ? "\"" :
-                        // 0番目ではない場合には、常にカンマを付与します。
+                        // If it is not the 0th, a comma is always given.
                                 "\",") + field.getName() + "=[\");");
                 listLine.add("for (int index = 0; index < f"
                         + fieldNameAdjustered + ".length; index++) {");
                 // 2006.05.31 t.iga
-                // ArrayListなどのtoStringと同様になるように、カンマのあとに半角スペースを付与するようにします。
+                // To make it similar to toString in ArrayList, etc., adds a half-width space after the comma.
                 listLine.add("buf.append((index == 0 ? \"\" : \", \") + f"
                         + fieldNameAdjustered + "[index]);");
                 listLine.add("}");
@@ -539,11 +536,11 @@ public class BlancoValueObjectXml2JavaClass {
     }
 
     /**
-     * 調整済みのフィールド名を取得します。
+     * Gets the adjusted field name.
      *
      * @param argFieldStructure
-     *            フィールド情報。
-     * @return 調整後のフィールド名。
+     *            Field information.
+     * @return Adjusted field name.
      */
     private String getFieldNameAdjustered(
             final BlancoValueObjectClassStructure argClassStructure,

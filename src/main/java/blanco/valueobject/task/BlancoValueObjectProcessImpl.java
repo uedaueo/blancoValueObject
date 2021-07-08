@@ -24,7 +24,7 @@ import java.io.IOException;
 public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
 
     /**
-     * メッセージ。
+     * A message.
      */
     private final BlancoValueObjectMessage fMsg = new BlancoValueObjectMessage();
 
@@ -44,7 +44,7 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
 
 
             /*
-             * 改行コードを決定します。
+             * Determines the newline code.
              */
             String LF = "\n";
             String CR = "\r";
@@ -76,20 +76,20 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
             }
 
             /*
-             * targetdir, targetStyleの処理。
-             * 生成されたコードの保管場所を設定する。
+             * Processes targetdir and targetStyle.
+             * Sets the storage location for the generated code.
              * targetstyle = blanco:
-             *  targetdirの下に main ディレクトリを作成
+             *  Creates a main directory under targetdir.
              * targetstyle = maven:
-             *  targetdirの下に main/java ディレクトリを作成
+             *  Creates a main/java directory under targetdir.
              * targetstyle = free:
-             *  targetdirをそのまま使用してディレクトリを作成。
-             *  ただしtargetdirがからの場合はデフォルト文字列(blanco)使用する。
+             *  Creates a directory using targetdir as is.
+             *  However, if targetdir is empty, the default string (blanco) is used.
              * by tueda, 2019/08/30
              */
             String strTarget = input.getTargetdir();
             String style = input.getTargetStyle();
-            // ここを通ったら常にtrue
+            // Always true when passing through here.
             boolean isTargetStyleAdvanced = true;
             if (style != null && BlancoValueObjectConstants.TARGET_STYLE_MAVEN.equals(style)) {
                 strTarget = strTarget + "/" + BlancoValueObjectConstants.TARGET_DIR_SUFFIX_MAVEN;
@@ -97,12 +97,12 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
                     !BlancoValueObjectConstants.TARGET_STYLE_FREE.equals(style)) {
                 strTarget = strTarget + "/" + BlancoValueObjectConstants.TARGET_DIR_SUFFIX_BLANCO;
             }
-            /* style が free だったらtargetdirをそのまま使う */
+            /* If style is free, uses targetdir as is. */
             if (input.getVerbose()) {
                 System.out.println("/* tueda */ TARGETDIR = " + strTarget);
             }
 
-            // テンポラリディレクトリを作成。
+            // Creates a temporary directory.
             new File(input.getTmpdir()
                     + BlancoValueObjectConstants.TARGET_SUBDIRECTORY).mkdirs();
 
@@ -110,21 +110,20 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
                     .getTmpdir()
                     + BlancoValueObjectConstants.TARGET_SUBDIRECTORY);
 
-            // XML化されたメタファイルからValueObjectを生成
-            // 最初にテンポラリフォルダを走査
+            // Generates ValueObject from XML-ized meta file.
+            // Scans the temporary folder first.
             final File[] fileMeta2 = new File(input.getTmpdir()
                     + BlancoValueObjectConstants.TARGET_SUBDIRECTORY)
                     .listFiles();
             /*
-             * まず始めにすべてのシートを検索して，クラス名とpackage名のリストを作ります．
-             * php形式の定義書では，クラスを指定する際にpackage名が指定されていないからです．
-             * ここでは生のxml情報を取得する必要があるので、共通で使用するオプションを
-             * セットする前に呼び出さなければならない。
+             * First, searches all the sheets and makes a list of structures from the class names.
+             * The reason is that in the PHP-style definitions, the package name is not specified when specifying a class.
+             * Since we need to get the raw XML information here, it has to be called before setting the commonly used options.
              */
             BlancoValueObjectUtil.processValueObjects(input);
 
             /*
-             * 共通で使用するオプションを記憶する
+             * Stores commonly used options.
              */
             BlancoValueObjectUtil.packageSuffix = input.getPackageSuffix();
             BlancoValueObjectUtil.overridePackage = input.getOverridePackage();
@@ -147,10 +146,10 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
                 xml2JavaClass.setSheetLang(new BlancoCgSupportedLang().convertToInt(input.getSheetType()));
                 xml2JavaClass.process(fileMeta2[index], new File(strTarget));
 
-                // 単体試験コードの自動生成機能は 0.9.1以降では削除されました。
+                // The auto-generation of unit test codes has been removed in 0.9.1 and later.
             }
 
-            // 次にメタディレクトリとして指定されているディレクトリを走査
+            // Next, scans the directory specified as the meta directory.
             final File[] fileMeta3 = fileMetadir.listFiles();
             for (int index = 0; index < fileMeta3.length; index++) {
                 if (fileMeta3[index].getName().endsWith(".xml") == false) {
@@ -165,12 +164,12 @@ public class BlancoValueObjectProcessImpl implements BlancoValueObjectProcess {
                 xml2JavaClass.setSheetLang(new BlancoCgSupportedLang().convertToInt(input.getSheetType()));
                 xml2JavaClass.process(fileMeta3[index], new File(strTarget));
 
-                // 単体試験コードの自動生成機能は 0.9.1以降では削除されました。
+                // The auto-generation of unit test codes has been removed in 0.9.1 and later.
             }
 
             return BlancoValueObjectBatchProcess.END_SUCCESS;
         } catch (TransformerException e) {
-            throw new IOException("XML変換の過程で例外が発生しました: " + e.toString());
+            throw new IOException("An exception has occurred during the XML conversion process: " + e.toString());
         }
     }
 

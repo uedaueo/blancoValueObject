@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * blancoValueObjectの 中間XMLファイル形式をパース(読み書き)するクラス。
+ *  * A class that parses (reads and writes) the intermediate XML file format of blancoValueObject.
  *
  * @author IGA Tosiki
  */
 public class BlancoValueObjectXmlParser {
     /**
-     * メッセージ。
+     * A message.
      */
     private final BlancoValueObjectMessage fMsg = new BlancoValueObjectMessage();
 
@@ -45,11 +45,11 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 中間XMLファイルのXMLドキュメントをパースして、バリューオブジェクト情報の配列を取得します。
+     * Parses an XML document in an intermediate XML file to get an array of information.
      *
      * @param argMetaXmlSourceFile
-     *            中間XMLファイル。
-     * @return パースの結果得られたバリューオブジェクト情報の配列。
+     *            An intermediate XML file.
+     * @return An array of information obtained as a result of parsing.
      */
     public BlancoValueObjectClassStructure[] parse(
             final File argMetaXmlSourceFile) {
@@ -64,25 +64,25 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 中間XMLファイル形式のXMLドキュメントをパースして、バリューオブジェクト情報の配列を取得します。
-     *
+     * Parses an XML document in an intermediate XML file to get an array of value object information.
+     * 
      * @param argXmlDocument
-     *            中間XMLファイルのXMLドキュメント。
-     * @return パースの結果得られたバリューオブジェクト情報の配列。
+     *            XML document of an intermediate XML file.
+     * @return An array of value object information obtained as a result of parsing.
      */
     public BlancoValueObjectClassStructure[] parse(
             final BlancoXmlDocument argXmlDocument) {
         final List<BlancoValueObjectClassStructure> listStructure = new ArrayList<BlancoValueObjectClassStructure>();
 
-        // ルートエレメントを取得します。
+        // Gets the root element.
         final BlancoXmlElement elementRoot = BlancoXmlBindingUtil
                 .getDocumentElement(argXmlDocument);
         if (elementRoot == null) {
-            // ルートエレメントが無い場合には処理中断します。
+            // The process is aborted if there is no root element.
             return null;
         }
 
-        // sheet(Excelシート)のリストを取得します。
+        // Gets a list of sheets (Excel sheets).
         final List<BlancoXmlElement> listSheet = BlancoXmlBindingUtil
                 .getElementsByTagName(elementRoot, "sheet");
 
@@ -91,7 +91,7 @@ public class BlancoValueObjectXmlParser {
             final BlancoXmlElement elementSheet = listSheet.get(index);
 
             /*
-             * Java以外の言語用に記述されたシートにも対応．
+             * Supports sheets written for languages other than Java.
              */
             List<BlancoXmlElement> listCommon = null;
             int sheetLang = BlancoCgSupportedLang.JAVA;
@@ -120,11 +120,11 @@ public class BlancoValueObjectXmlParser {
             }
 
             if (listCommon == null || listCommon.size() == 0) {
-                // commonが無い場合にはスキップします。
+                // Skips if there is no common.
                 continue;
             }
 
-            // 最初のアイテムのみ処理しています。
+            // Processes only the first item.
             final BlancoXmlElement elementCommon = listCommon.get(0);
             final String name = BlancoXmlBindingUtil.getTextContent(
                     elementCommon, "name");
@@ -143,7 +143,7 @@ public class BlancoValueObjectXmlParser {
             }
 
             if (objClassStructure != null) {
-                // 得られた情報を記憶します。
+                // Memorizes the obtained information.
                 listStructure.add(objClassStructure);
             }
         }
@@ -155,11 +155,11 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 中間XMLファイル形式の「sheet」XMLエレメントをパースして、バリューオブジェクト情報を取得します。
-     *
+     * Parses the "sheet" XML element in the intermediate XML file to get the value object information.
+     * 
      * @param argElementSheet
-     *            中間XMLファイルの「sheet」XMLエレメント。
-     * @return パースの結果得られたバリューオブジェクト情報。「name」が見つからなかった場合には nullを戻します。
+     *            "sheet" XML element in the intermediate XML file.
+     * @return Value object information obtained as a result of parsing. Null is returned if "name" is not found.
      */
     public BlancoValueObjectClassStructure parseElementSheet(
             final BlancoXmlElement argElementSheet) {
@@ -168,7 +168,7 @@ public class BlancoValueObjectXmlParser {
                 .getElementsByTagName(argElementSheet,
                         "blancovalueobject-common");
         if (listCommon == null || listCommon.size() == 0) {
-            // commonが無い場合にはスキップします。
+            // Skips if there is no common.
             return null;
         }
         final BlancoXmlElement elementCommon = listCommon.get(0);
@@ -187,8 +187,8 @@ public class BlancoValueObjectXmlParser {
                 if (index == 0) {
                     objClassStructure.setDescription(lines[index]);
                 } else {
-                    // 複数行の description については、これを分割して格納します。
-                    // ２行目からは、適切に文字参照エンコーディングが実施されているものと仮定します。
+                    // For a multi-line description, it will be split and stored.
+                    // From the second line, assumes that character reference encoding has been properly implemented. 
                     objClassStructure.getDescriptionList().add(lines[index]);
                 }
             }
@@ -211,7 +211,7 @@ public class BlancoValueObjectXmlParser {
 
         if (BlancoStringUtil.null2Blank(objClassStructure.getName()).trim()
                 .length() == 0) {
-            // 名前が無いものはスキップします。
+            // Skips if name is empty.
             return null;
         }
 
@@ -281,8 +281,8 @@ public class BlancoValueObjectXmlParser {
                     if (indexLine == 0) {
                         fieldStructure.setDescription(lines[indexLine]);
                     } else {
-                        // 複数行の description については、これを分割して格納します。
-                        // ２行目からは、適切に文字参照エンコーディングが実施されているものと仮定します。
+                        // For a multi-line description, it will be split and stored.
+                        // From the second line, assumes that character reference encoding has been properly implemented.   
                         fieldStructure.getDescriptionList().add(
                                 lines[indexLine]);
                     }
@@ -318,11 +318,11 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 中間XMLファイル形式の「sheet」XMLエレメント(PHP書式)をパースして、バリューオブジェクト情報を取得します。
+     * Parses the "sheet" XML element (PHP format) in the intermediate XML file to get the value object information.
      *
      * @param argElementSheet
-     *            中間XMLファイルの「sheet」XMLエレメント。
-     * @return パースの結果得られたバリューオブジェクト情報。「name」が見つからなかった場合には nullを戻します。
+     *            "sheet" XML element in the intermediate XML file.
+     * @return Value object information obtained as a result of parsing. Null is returned if "name" is not found.
      */
     public BlancoValueObjectClassStructure parseElementSheetPhp(
             final BlancoXmlElement argElementSheet
@@ -332,24 +332,24 @@ public class BlancoValueObjectXmlParser {
                 .getElementsByTagName(argElementSheet,
                         "blancovalueobjectphp-common");
         if (listCommon == null || listCommon.size() == 0) {
-            // commonが無い場合にはスキップします。
+            // Skips if there is no common.
             return null;
         }
 
-        // パッケージ名の置き換えオプションがあれば設定しておく
+        // Sets the option to replace the package name if available.
         objClassStructure.setPackageSuffix(BlancoValueObjectUtil.packageSuffix);
         objClassStructure.setOverridePackage(BlancoValueObjectUtil.overridePackage);
 
-        // バリューオブジェクト定義(php)・共通
+        // Value object definition (PHP) common
         final BlancoXmlElement elementCommon = listCommon.get(0);
         parseCommonPhp(elementCommon, objClassStructure);
         if (BlancoStringUtil.null2Blank(objClassStructure.getName()).trim()
                 .length() == 0) {
-            // 名前が無いものはスキップします。
+            // Skips if name is empty.
             return null;
         }
 
-        // バリューオブジェクト定義(php)・継承
+        // Value object definition (PHP) inheritance
         final List<BlancoXmlElement> extendsList = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet,
                         "blancovalueobjectphp-extends");
@@ -358,7 +358,7 @@ public class BlancoValueObjectXmlParser {
             parseExtendsPhp(elementExtendsRoot, objClassStructure);
         }
 
-        // バリューオブジェクト定義(php)・実装
+        // Value object definition (PHP) implementation
         final List<BlancoXmlElement> interfaceList = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet,
                         "blancovalueobjectphp-implements");
@@ -380,7 +380,7 @@ public class BlancoValueObjectXmlParser {
             parseImportListPhp(elementImportRoot, objClassStructure);
         }
 
-        // バリューオブジェクト定義(php)・一覧
+        // Value object definition (PHP) list
         final List<BlancoXmlElement> listList = BlancoXmlBindingUtil
                 .getElementsByTagName(argElementSheet, "blancovalueobjectphp-list");
         if (listList != null && listList.size() != 0) {
@@ -392,7 +392,7 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 共通定義を処理します。
+     * Processes the common definition.
      * @param argElementCommon
      * @param argObjClassStructure
      */
@@ -404,8 +404,7 @@ public class BlancoValueObjectXmlParser {
                 argElementCommon, "name"));
 
         /*
-         * このクラスのパッケージ名は suffix や override 前のものを
-         * 覚えておき、ソースコード生成時に調整する。
+         * Remembers the package name of this class before suffixing and overriding, and adjusts it when generating the source code.
          */
         argObjClassStructure.setPackage(BlancoXmlBindingUtil.getTextContent(
                 argElementCommon, "package"));
@@ -420,8 +419,8 @@ public class BlancoValueObjectXmlParser {
                 if (index == 0) {
                     argObjClassStructure.setDescription(lines[index]);
                 } else {
-                    // 複数行の description については、これを分割して格納します。
-                    // ２行目からは、適切に文字参照エンコーディングが実施されているものと仮定します。
+                    // For a multi-line description, it will be split and stored.
+                    // From the second line, assumes that character reference encoding has been properly implemented.   
                     argObjClassStructure.getDescriptionList().add(lines[index]);
                 }
             }
@@ -441,7 +440,7 @@ public class BlancoValueObjectXmlParser {
 //        objClassStructure.setAccess(BlancoXmlBindingUtil.getTextContent(
 //                elementCommon, "access"));
         /*
-         * PHP 形式の定義書には access 修飾子の設定がないので全てpublicとする
+         * There is no access modifier set in the PHP-style definition document, so all are public.
          */
         argObjClassStructure.setAccess("public");
         argObjClassStructure.setAbstract("true".equals(BlancoXmlBindingUtil
@@ -464,7 +463,7 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * 中間XMLファイル形式の「sheet」XMLエレメント(PHP書式)をパースして、バリューオブジェクト情報を取得します。
+     * Parses the "sheet" XML element (PHP format) in the intermediate XML file to get the value object information.
      *
      * @param argElementExtendsRoot
      * @param argClassStructure
@@ -479,7 +478,7 @@ public class BlancoValueObjectXmlParser {
                 (BlancoValueObjectUtil.packageSuffix != null && BlancoValueObjectUtil.packageSuffix.length() > 0) ||
                 (BlancoValueObjectUtil.overridePackage != null && BlancoValueObjectUtil.overridePackage.length() > 0)) {
             /*
-             * このクラスのパッケージ名を探す
+             * Searches for the package name for this class.
              */
             packageName = BlancoValueObjectUtil.searchPackageBySimpleName(className);
         }
@@ -518,10 +517,9 @@ public class BlancoValueObjectXmlParser {
     }
 
     /**
-     * バリューオブジェクト定義(php)・実装<br>
+     * Value object definition (PHP) implementation<br>
      * <br>
-     * packageSuffix, overridePackage が指定されている場合、
-     * tmp を検索して見つかればそれを優先する。
+     * If packageSuffix or overridePackage is specified, searches for tmp and give priority to it if found.
      * @param argElementInterfaceRoot
      * @param argClassStructure
      */
@@ -545,7 +543,7 @@ public class BlancoValueObjectXmlParser {
             if (interfacePackage.length() == 0 ||
                     (BlancoValueObjectUtil.packageSuffix != null && BlancoValueObjectUtil.packageSuffix.length() > 0) ||
                     (BlancoValueObjectUtil.overridePackage != null && BlancoValueObjectUtil.overridePackage.length() > 0)) {
-                // このインタフェイスが自動生成されていればそちらを優先
+                // If this interface is auto-generated, gives priority to it.
                 interfacePackage = BlancoValueObjectUtil.searchPackageBySimpleName(interfaceSimple);
                 if (interfacePackage != null && interfacePackage.length() >0) {
                     interfaceName = interfacePackage + "." + interfaceSimple;
@@ -560,7 +558,7 @@ public class BlancoValueObjectXmlParser {
 
 
     /**
-     * import の一覧作成
+     * Creates a list of import.
      * @param argElementImportRoot
      * @param argClassStructure
      */
@@ -588,7 +586,7 @@ public class BlancoValueObjectXmlParser {
 
 
     /**
-     * バリューオブジェクト定義(php)・一覧
+     * Value object definition (PHP) list
      * @param argElementListRoot
      * @param argClassStructure
      */
@@ -613,15 +611,15 @@ public class BlancoValueObjectXmlParser {
             }
 
             /*
-             * 型の取得．Java 型が定義されている場合はそちらが優先。
-             * Java型の取得．型名は Java 風に定義されている前提。
-             * php 型の場合は、ここで Java 風の型名に変えておく
+             * Gets the type. If a Java type is defined, it takes precedence.
+             * Gets the Java type. The type name is assumed to be defined in Java-style.
+             * In the case of the PHP type, changes the type name to Java-style here.
              */
             String javaType = BlancoXmlBindingUtil.getTextContent(elementList, "typeJava");
             if (BlancoStringUtil.null2Blank(javaType).length() == 0) {
                 String phpType = BlancoXmlBindingUtil.getTextContent(elementList, "type");
                 if (BlancoStringUtil.null2Blank(phpType).length() == 0) {
-                    // 型は必須
+                    // Type is required.
                     throw new IllegalArgumentException(fMsg.getMbvoji04(
                             argClassStructure.getName(),
                             fieldStructure.getName()
@@ -632,7 +630,7 @@ public class BlancoValueObjectXmlParser {
             }
             fieldStructure.setType(javaType);
 
-            /* Java Generic がある場合はそちらが優先 */
+            /* If Java Generic is available, it takes precedence. */
             String javaGeneric = BlancoXmlBindingUtil.getTextContent(elementList, "genericJava");
             if (BlancoStringUtil.null2Blank(javaGeneric).length() == 0) {
                 String phpGeneric = BlancoXmlBindingUtil.getTextContent(elementList, "generic");
@@ -656,11 +654,11 @@ public class BlancoValueObjectXmlParser {
                 fieldStructure.setAnnotationList(createAnnotaionList(javaAnnotation));
             }
 
-            // abstract に対応
+            // Supports for abstract.
             fieldStructure.setAbstract("true".equals(BlancoXmlBindingUtil
                     .getTextContent(elementList, "abstract")));
 
-            // required に対応 (NotNullアノテーションの付与）
+            // Supports for required. (Giving NotNull annotation)
             fieldStructure.setRequired("true".equals(BlancoXmlBindingUtil
                     .getTextContent(elementList, "required")));
             if (fieldStructure.getRequired()) {
@@ -668,7 +666,7 @@ public class BlancoValueObjectXmlParser {
                 argClassStructure.getImportList().add("javax.validation.constraints.NotNull");
             }
 
-            // value に対応
+            // Supports for value.
             fieldStructure.setFixedValue("true".equals(BlancoXmlBindingUtil
                     .getTextContent(elementList, "fixedValue")));
 
@@ -680,16 +678,16 @@ public class BlancoValueObjectXmlParser {
                 if (indexLine == 0) {
                     fieldStructure.setDescription(lines[indexLine]);
                 } else {
-                    // 複数行の description については、これを分割して格納します。
-                    // ２行目からは、適切に文字参照エンコーディングが実施されているものと仮定します。
+                    // For a multi-line description, it will be split and stored.
+                    // From the second line, assumes that character reference encoding has been properly implemented.   
                     fieldStructure.getDescriptionList().add(
                             lines[indexLine]);
                 }
             }
 
             /*
-             * Java 向け default 値があればそちらを優先。
-             * ignoreDefault が指定されている場合も java 向け default は有効
+             * If there is a default value for Java, it is preferred.
+             * Even if ignoreDefault is specified, default for Java is valid.
              */
             String javaDefault = BlancoXmlBindingUtil.getTextContent(
                     elementList, "defaultJava");

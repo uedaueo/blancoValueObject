@@ -24,7 +24,7 @@ public class BlancoValueObjectUtil {
     public static HashMap<String, BlancoValueObjectClassStructure> objects = new HashMap<>();
 
     /**
-     * blancoValueObjectのリソースバンドルオブジェクト。
+     * Resource bundle object for blancoValueObject.
      */
     public final static BlancoValueObjectResourceBundle fBundle = new BlancoValueObjectResourceBundle();
 
@@ -44,9 +44,9 @@ public class BlancoValueObjectUtil {
             System.out.println("BlancoValueObjectUtil : processValueObjects start !");
         }
 
-        /* tmpdir はユニーク */
+        /* tmpdir is unique. */
         String baseTmpdir = input.getTmpdir();
-        /* searchTmpdir はカンマ区切り */
+        /* searchTmpdir is comma separated. */
         String tmpTmpdirs = input.getSearchTmpdir();
         List<String> searchTmpdirList = null;
         if (tmpTmpdirs != null && !tmpTmpdirs.equals(baseTmpdir)) {
@@ -65,7 +65,7 @@ public class BlancoValueObjectUtil {
 
     static private void searchTmpdir(String tmpdir) {
 
-        // XML化された中間ファイルから情報を読み込む
+        // Reads information from XML-ized intermediate files.
         final File[] fileMeta3 = new File(tmpdir
                 + BlancoValueObjectConstants.TARGET_SUBDIRECTORY)
                 .listFiles();
@@ -85,8 +85,8 @@ public class BlancoValueObjectUtil {
             BlancoValueObjectXmlParser parser = new BlancoValueObjectXmlParser();
 //            parser.setVerbose(this.isVerbose());
             /*
-             * まず始めにすべてのシートを検索して，クラス名とpackage名のリストを作ります．
-             * php形式の定義書では，クラスを指定する際にpackage名が指定されていないからです．
+             * The first step is to search all the sheets and make a list of class and package names.
+             * This is because the package name is not specified when specifying a class in the PHP format definition.
              *
              */
             final BlancoValueObjectClassStructure[] structures = parser.parse(fileMeta3[index]);
@@ -156,7 +156,7 @@ public class BlancoValueObjectUtil {
                 javaType = "java.lang.Boolean";
             } else
             if ("integer".equalsIgnoreCase(phpType)) {
-                // integer 型は 64 bit に変換する
+                // Converts integer type to 64bit.
                 javaType = "java.lang.Long";
             } else
             if ("double".equalsIgnoreCase(phpType)) {
@@ -181,25 +181,25 @@ public class BlancoValueObjectUtil {
             if ("object".equalsIgnoreCase(phpType)) {
                 javaType = "java.lang.Object";
             } else
-            if ("ArrayList".equals(phpType)) { // 完全一致する場合のみ、CanonicalName に置き換える。
+            if ("ArrayList".equals(phpType)) { // Replaces CanonicalName only if there is an exact match.
                 javaType = "java.util.ArrayList";
             } else
-            if ("List".equals(phpType)) { // 完全一致する場合のみ、CanonicalName に置き換える。
+            if ("List".equals(phpType)) { // Replaces CanonicalName only if there is an exact match.
                 javaType = "java.util.List";
             } else
-            if ("Map".equals(phpType)) { // 完全一致する場合のみ、CanonicalName に置き換える。
+            if ("Map".equals(phpType)) { // Replaces CanonicalName only if there is an exact match.
                 javaType = "java.util.Map";
             } else
-            if ("HashMap".equals(phpType)) { // 完全一致する場合のみ、CanonicalName に置き換える。
+            if ("HashMap".equals(phpType)) { // Replaces CanonicalName only if there is an exact match.
                 javaType = "java.util.HashMap";
             } else {
-                /* この名前の package を探す */
+                /* Searches for a package with this name. */
                 String packageName = BlancoValueObjectUtil.searchPackageBySimpleName(phpType);
                 if (packageName != null) {
                     javaType = packageName + "." + phpType;
                 }
 
-                /* その他はそのまま記述する */
+                /* Others are written as is. */
                 if (isVerbose) {
                     System.out.println("/* tueda */ Unknown php type: " + javaType);
                 }
@@ -210,8 +210,8 @@ public class BlancoValueObjectUtil {
 
 
     static public String searchPackageBySimpleName(String simpleName) {
-        // パッケージ名の置き換えオプションが指定されていれば置き換え
-        // Suffix があればそちらが優先です。
+        // Replaces the package name if the replace option is specified.
+        // If Suffix is present, it takes precedence.
         String packageName = null;
         BlancoValueObjectClassStructure voStructure = objects.get(simpleName);
         if (voStructure != null) {
