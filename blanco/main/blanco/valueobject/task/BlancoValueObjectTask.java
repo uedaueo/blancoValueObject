@@ -545,7 +545,7 @@ public class BlancoValueObjectTask extends Task {
     public final void execute() throws BuildException {
         System.out.println("BlancoValueObjectTask begin.");
 
-        // 項目番号[1]、アトリビュート[metadir]は必須入力です。入力チェックを行います。
+        // 項目番号[1], アトリビュート[metadir]は必須入力です。入力チェックを行います。
         if (fIsFieldMetadirProcessed == false) {
             throw new BuildException("必須アトリビュート[metadir]が設定されていません。処理を中断します。");
         }
@@ -572,10 +572,10 @@ public class BlancoValueObjectTask extends Task {
 
         try {
             // 実際のAntタスクの主処理を実行します。
-            // この箇所でコンパイルエラーが発生する場合、BlancoValueObjectProcessインタフェースを実装して blanco.valueobject.taskパッケージに BlancoValueObjectProcessImplクラスを作成することにより解決できる場合があります。
+            // If you get a compile error at this point, You may be able to solve it by implementing a BlancoValueObjectProcess interface and creating an BlancoValueObjectProcessImpl class in package blanco.valueobject.task.
             final BlancoValueObjectProcess proc = new BlancoValueObjectProcessImpl();
             if (proc.execute(fInput) != BlancoValueObjectBatchProcess.END_SUCCESS) {
-                throw new BuildException("タスクは異常終了しました。");
+                throw new BuildException("The task has terminated abnormally.");
             }
         } catch (IllegalArgumentException e) {
             if (getVerbose()) {
