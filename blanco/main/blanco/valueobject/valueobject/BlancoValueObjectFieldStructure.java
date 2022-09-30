@@ -138,6 +138,14 @@ public class BlancoValueObjectFieldStructure {
     private String fMaxInclusive;
 
     /**
+     * コンストラクタ引数かどうか
+     *
+     * フィールド: [constArg]。
+     * デフォルト: [false]。
+     */
+    private Boolean fConstArg = false;
+
+    /**
      * フィールド [no] の値を設定します。
      *
      * フィールドの説明: [項目番号。省略可能です。]。
@@ -539,6 +547,29 @@ public class BlancoValueObjectFieldStructure {
     }
 
     /**
+     * フィールド [constArg] の値を設定します。
+     *
+     * フィールドの説明: [コンストラクタ引数かどうか]。
+     *
+     * @param argConstArg フィールド[constArg]に設定する値。
+     */
+    public void setConstArg(final Boolean argConstArg) {
+        fConstArg = argConstArg;
+    }
+
+    /**
+     * フィールド [constArg] の値を取得します。
+     *
+     * フィールドの説明: [コンストラクタ引数かどうか]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[constArg]から取得した値。
+     */
+    public Boolean getConstArg() {
+        return fConstArg;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -571,6 +602,7 @@ public class BlancoValueObjectFieldStructure {
         buf.append(",length=" + fLength);
         buf.append(",minInclusive=" + fMinInclusive);
         buf.append(",maxInclusive=" + fMaxInclusive);
+        buf.append(",constArg=" + fConstArg);
         buf.append("]");
         return buf.toString();
     }
@@ -647,5 +679,8 @@ public class BlancoValueObjectFieldStructure {
         // Name: fMaxInclusive
         // Type: java.lang.String
         target.fMaxInclusive = this.fMaxInclusive;
+        // Name: fConstArg
+        // Type: java.lang.Boolean
+        target.fConstArg = this.fConstArg;
     }
 }

@@ -26,7 +26,7 @@ public class BlancoValueObjectTest {
     @Test
     public void testBlancoValueObject() {
         BlancoValueObjectProcessInput input = new BlancoValueObjectProcessInput();
-        input.setMetadir("meta/objects2");
+        input.setMetadir("meta/objects4");
         input.setEncoding("UTF-8");
         input.setSheetType("php");
         input.setTmpdir("tmpTest2");
@@ -106,6 +106,28 @@ public class BlancoValueObjectTest {
         input.setVoPackageSuffix("blanco");
         input.setIgnoreImport(true);
         input.setIgnoreAnnotation(true);
+
+        BlancoValueObjectProcessImpl imple = new BlancoValueObjectProcessImpl();
+        try {
+            imple.execute(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testBlancoValueObjectEnum() {
+        BlancoValueObjectProcessInput input = new BlancoValueObjectProcessInput();
+        input.setMetadir("meta/objects4");
+        input.setEncoding("UTF-8");
+        input.setSheetType("php");
+        input.setTmpdir("tmpTest4");
+        input.setTargetdir("sample/blanco");
+        input.setTargetStyle("maven");
+        input.setVerbose(true);
+        input.setLineSeparator("LF");
+        input.setPackageSuffix("blanco");
+        input.setVoPackageSuffix("blanco");
 
         BlancoValueObjectProcessImpl imple = new BlancoValueObjectProcessImpl();
         try {

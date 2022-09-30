@@ -13,6 +13,7 @@ import blanco.beanutils.BlancoBeanUtils;
 import blanco.cg.BlancoCgObjectFactory;
 import blanco.cg.BlancoCgSupportedLang;
 import blanco.cg.transformer.BlancoCgTransformerFactory;
+import blanco.cg.util.BlancoCgLineUtil;
 import blanco.cg.util.BlancoCgSourceUtil;
 import blanco.cg.valueobject.*;
 import blanco.commons.util.BlancoJavaSourceUtil;
@@ -23,7 +24,6 @@ import blanco.valueobject.message.BlancoValueObjectMessage;
 import blanco.valueobject.resourcebundle.BlancoValueObjectResourceBundle;
 import blanco.valueobject.valueobject.BlancoValueObjectClassStructure;
 import blanco.valueobject.valueobject.BlancoValueObjectFieldStructure;
-import blanco.xml.bind.BlancoXmlBindingUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +91,11 @@ public class BlancoValueObjectXml2JavaClass {
     private BlancoCgClass fCgClass = null;
 
     /**
+     * Enum Class information for blancoCg, internally use only.
+     */
+    private BlancoCgEnum fCgEnumClass = null;
+
+    /**
      * Character encoding of auto-generated source files.
      */
     private String fEncoding = null;
@@ -122,7 +127,31 @@ public class BlancoValueObjectXml2JavaClass {
         final BlancoValueObjectClassStructure[] structures = parser.parse(argMetaXmlSourceFile);
         for (int index = 0; index < structures.length; index++) {
             // Generates Java source code from the obtained information.
-            structure2Source(structures[index], argDirectoryTarget);
+            BlancoValueObjectClassStructure classStructure = structures[index];
+            structure2Source(classStructure, argDirectoryTarget);
+        }
+    }
+
+    /**
+     * sturcture2Source method is used by other blanco-tools.
+     *
+     * @param argClassStructure
+     * @param argDirectoryTarget
+     * @throws IOException
+     */
+    public void structure2Source(
+            final BlancoValueObjectClassStructure argClassStructure,
+            final File argDirectoryTarget) throws IOException {
+        if (argClassStructure.getEnumeration()) {
+            if (isVerbose()) {
+                System.out.println("/*** Enum!!! ***/ " + argClassStructure.getName());
+            }
+            generateEnum(argClassStructure, argDirectoryTarget);
+        } else {
+            if (isVerbose()) {
+                System.out.println("/*** Class!!! ***/ " + argClassStructure.getName());
+            }
+            generateClass(argClassStructure, argDirectoryTarget);
         }
     }
 
@@ -136,7 +165,7 @@ public class BlancoValueObjectXml2JavaClass {
      * @throws IOException
      *             If an I/O exception occurs.
      */
-    public void structure2Source(
+    public void generateClass(
             final BlancoValueObjectClassStructure argClassStructure,
             final File argDirectoryTarget) throws IOException {
         /*
@@ -265,6 +294,289 @@ public class BlancoValueObjectXml2JavaClass {
         // Auto-generates the actual source code based on the collected information.
         BlancoCgTransformerFactory.getJavaSourceTransformer().transform(
                 fCgSourceFile, fileBlancoMain);
+    }
+
+    /**
+     * Generate Enum class
+     * @param argClassStructure
+     * @param argDirectoryTarget
+     * @throws IOException
+     */
+    public void generateEnum(
+            final BlancoValueObjectClassStructure argClassStructure,
+            final File argDirectoryTarget) throws IOException {
+        /*
+         * The output directory will be in the format specified by the targetStyle argument of the ant task.
+         * For compatibility, the output directory will be blanco/main if it is not specified.
+         * by tueda, 2019/08/30
+         */
+        String strTarget = argDirectoryTarget
+                .getAbsolutePath(); // advanced
+        if (!this.isTargetStyleAdvanced()) {
+            strTarget += "/main"; // legacy
+        }
+        final File fileBlancoMain = new File(strTarget);
+
+        /* tueda DEBUG */
+        if (this.isVerbose()) {
+            System.out.println("/* tueda */ generateEnum argDirectoryTarget : " + argDirectoryTarget.getAbsolutePath());
+        }
+
+        // Gets an instance of the BlancoCgObjectFactory class.
+        fCgFactory = BlancoCgObjectFactory.getInstance();
+
+        // Replace the package name if the Replace option is specified.
+        // If Suffix is present, it takes precedence.
+        String packageName = argClassStructure.getPackage();
+        if (BlancoValueObjectUtil.packageSuffix != null && BlancoValueObjectUtil.packageSuffix.length() > 0) {
+            if (BlancoStringUtil.null2Blank(packageName).length() > 0) {
+                packageName += ".";
+            } else {
+                packageName = "";
+            }
+            packageName += BlancoValueObjectUtil.packageSuffix;
+        } else if (BlancoValueObjectUtil.overridePackage != null && BlancoValueObjectUtil.overridePackage.length() > 0) {
+            packageName = BlancoValueObjectUtil.overridePackage;
+        }
+
+        fCgSourceFile = fCgFactory.createSourceFile(packageName, null);
+        fCgSourceFile.setEncoding(fEncoding);
+
+        // Creates a class.
+        fCgEnumClass = fCgFactory.createEnum(argClassStructure.getName(), "");
+        fCgSourceFile.getEnumList().add(fCgEnumClass);
+
+        // Enum is always public
+        fCgEnumClass.setAccess("public");
+
+        // Sets the JavaDoc for the class.
+        fCgEnumClass.setDescription(argClassStructure.getDescription());
+        for (String line : argClassStructure.getDescriptionList()) {
+            fCgEnumClass.getLangDoc().getDescriptionList().add(line);
+        }
+
+        /* Sets the annotation for the class. */
+        /* Annotion for Enum is not supported yet now. */
+//        List annotationList = argClassStructure.getAnnotationList();
+//        if (annotationList != null && annotationList.size() > 0) {
+//            fCgEnumClass.getAnnotationList().addAll(argClassStructure.getAnnotationList());
+//            /* tueda DEBUG */
+//            System.out.println("/* tueda */ structure2Source : class annotation = " + argClassStructure.getAnnotationList().get(0));
+//        }
+
+        /* Sets the import for the class. */
+        for (int index = 0; index < argClassStructure.getImportList()
+                .size(); index++) {
+            final String imported = (String) argClassStructure.getImportList()
+                    .get(index);
+            fCgSourceFile.getImportList().add(imported);
+        }
+
+        for (int indexField = 0; indexField < argClassStructure.getFieldList()
+                .size(); indexField++) {
+            // Processes each field.
+            final BlancoValueObjectFieldStructure fieldStructure = (BlancoValueObjectFieldStructure) argClassStructure
+                    .getFieldList().get(indexField);
+
+            // If a required field is not set, exception processing will be performed.
+            if (fieldStructure.getName() == null) {
+                throw new IllegalArgumentException(fMsg
+                        .getMbvoji03(argClassStructure.getName()));
+            }
+            if (fieldStructure.getType() == null) {
+                throw new IllegalArgumentException(fMsg.getMbvoji04(
+                        argClassStructure.getName(), fieldStructure.getName()));
+            }
+
+            /*
+             * Checks if filed is a constructotr argument.
+             */
+            Boolean isConstArg = fieldStructure.getConstArg();
+
+            if (isConstArg && fieldStructure.getType() == null) {
+                throw new IllegalArgumentException(fMsg.getMbvoji04(
+                        argClassStructure.getName(), fieldStructure.getName()));
+            }
+            if (isConstArg != null && isConstArg) {
+                buildConstArg(argClassStructure, fieldStructure);
+            } else {
+                // Generates a field.
+                buildEnumerate(argClassStructure, fieldStructure);
+            }
+        }
+        if (fCgEnumClass.getConstructorArgList().size() > 0) {
+            buildConstructor(argClassStructure);
+        }
+
+        // Auto-generates the actual source code based on the collected information.
+        BlancoCgTransformerFactory.getJavaSourceTransformer().transform(
+                fCgSourceFile, fileBlancoMain);
+    }
+
+    /**
+     * build an constructor argument.
+     *
+     * @param argEnumStructure
+     * @param argFieldStructure
+     */
+    private void buildConstArg(
+            final BlancoValueObjectClassStructure argEnumStructure,
+            final BlancoValueObjectFieldStructure argFieldStructure
+    ) {
+        switch (fSheetLang) {
+            case BlancoCgSupportedLang.PHP:
+                if (argFieldStructure.getType() == "Integer") argFieldStructure.setType("Long");
+                break;
+            /* If you want to add more languages, add the case here. */
+        }
+
+        /* Determines the type; if typeKt is set, it will take precedence. */
+        String typeRaw = argFieldStructure.getType();
+
+        /*
+         * In blancoValueObject, the property name is prefixed with "f", but in Kotlin, it is not prefixed because of the implicit getter/setter.
+         */
+        final BlancoCgField constParam = fCgFactory.createField(argFieldStructure.getName(),
+                typeRaw, null);
+        fCgEnumClass.getConstructorArgList().add(constParam);
+
+        /*
+         * Supports Generic. Since blancoCg assumes that <> is attached and trims the package part, it will not be set correctly if it is not set here.
+         * If genericKt is set, it will take precedence.
+         */
+        String genericRaw = argFieldStructure.getGeneric();
+        if (genericRaw != null && genericRaw.length() > 0) {
+            constParam.getType().setGenerics(genericRaw);
+        }
+
+//        if (this.isVerbose()) {
+//            System.out.println("!!! type = " + argFieldStructure.getType());
+//            System.out.println("!!! generic = " + field.getType().getGenerics());
+//        }
+
+        /*
+         * For the time being, private and getter/setter are not supported in blancoValueObjectKt.
+         */
+        constParam.setAccess("public");
+
+        // Sets the JavaDoc for the field.
+        constParam.setDescription(argFieldStructure.getDescription());
+        for (String line : argFieldStructure.getDescriptionList()) {
+            constParam.getLangDoc().getDescriptionList().add(line);
+        }
+        constParam.getLangDoc().getDescriptionList().add(
+                fBundle.getXml2javaclassFieldName(argFieldStructure.getName()));
+
+        if (argFieldStructure.getDefault() != null) {
+            final String type = constParam.getType().getName();
+
+            if (type.equals("java.util.Date")) {
+                /*
+                 * java.util.Date type does not allow default values.
+                 */
+                throw new IllegalArgumentException(fMsg.getMbvoji05(
+                        argEnumStructure.getName(), argFieldStructure
+                                .getName(), argFieldStructure.getDefault(),
+                        type));
+            }
+
+            String defaultRawValue = argFieldStructure.getDefault();
+
+            // Sets the default value for the field.
+            constParam.getLangDoc().getDescriptionList().add(
+                    BlancoCgSourceUtil.escapeStringAsLangDoc(BlancoCgSupportedLang.JAVA, fBundle.getXml2javaclassFieldDefault(defaultRawValue)));
+            if (argEnumStructure.getAdjustDefaultValue() == false) {
+                // If the variant of the default value is off, the value on the definition sheet is adopted as it is.
+                constParam.setDefault(defaultRawValue);
+            } else {
+
+                if (type.equals("java.lang.String")) {
+                    // Adds double-quotes.
+                    constParam.setDefault("\""
+                            + BlancoJavaSourceUtil
+                            .escapeStringAsJavaSource(argFieldStructure
+                                    .getDefault()) + "\"");
+                } else if (type.equals("boolean") || type.equals("short")
+                        || type.equals("int") || type.equals("long")) {
+                    constParam.setDefault(argFieldStructure.getDefault());
+                } else if (type.equals("java.lang.Boolean")
+                        || type.equals("java.lang.Integer")
+                        || type.equals("java.lang.Long")) {
+                    constParam.setDefault("new "
+                            + BlancoNameUtil.trimJavaPackage(type) + "("
+                            + argFieldStructure.getDefault() + ")");
+                } else if (type.equals("java.lang.Short")) {
+                    constParam.setDefault("new "
+                            + BlancoNameUtil.trimJavaPackage(type)
+                            + "((short) " + argFieldStructure.getDefault()
+                            + ")");
+                } else if (type.equals("java.math.BigDecimal")) {
+                    fCgSourceFile.getImportList().add("java.math.BigDecimal");
+                    // Converts a string to BigDecimal.
+                    constParam.setDefault("new BigDecimal(\""
+                            + argFieldStructure.getDefault() + "\")");
+                } else if (type.equals("java.util.List")
+                        || type.equals("java.util.ArrayList")) {
+                    // In the case of ArrayList, it will adopt the given character as is.
+                    // TODO: In the case of second generation blancoValueObject adoption, all class imports are appropriate.
+                    fCgSourceFile.getImportList().add(type);
+                    constParam.setDefault(argFieldStructure.getDefault());
+                } else {
+                    throw new IllegalArgumentException(fMsg.getMbvoji05(
+                            argEnumStructure.getName(), argFieldStructure
+                                    .getName(), argFieldStructure.getDefault(),
+                            type));
+                }
+            }
+        }
+
+        /* Sets the annotation for the method. */
+        List annotationList = argFieldStructure.getAnnotationList();
+        if (annotationList != null && annotationList.size() > 0) {
+            constParam.getAnnotationList().addAll(annotationList);
+//            System.out.println("/* tueda */ method annotation = " + constParam.getAnnotationList().get(0));
+        }
+    }
+
+    /**
+     * build an enumerate.
+     *
+     * @param argEnumStructure
+     * @param argFieldStructure
+     */
+    private void buildEnumerate(
+            final BlancoValueObjectClassStructure argEnumStructure,
+            final BlancoValueObjectFieldStructure argFieldStructure
+    ) {
+        final BlancoCgEnumElement enumElement = fCgFactory.createEnumElement(argFieldStructure.getName(), "");
+        fCgEnumClass.getElementList().add(enumElement);
+
+        // Description
+        if (BlancoStringUtil.null2Blank(argFieldStructure.getDescription()).length() > 0) {
+            enumElement.setDescription(argFieldStructure.getDescription());
+        }
+
+        // value
+        if (BlancoStringUtil.null2Blank(argFieldStructure.getDefault()).length() > 0) {
+            enumElement.setDefault(argFieldStructure.getDefault());
+        }
+    }
+
+    private void buildConstructor(
+            final BlancoValueObjectClassStructure argEnumStructure
+    ) {
+        BlancoCgMethod constMethod = fCgFactory.createMethod(argEnumStructure.getName(), "Constructor for Enum.");
+        constMethod.setConstructor(true);
+        constMethod.setAccess("");
+        fCgEnumClass.getMethodList().add(constMethod);
+        for (BlancoCgField field : fCgEnumClass.getConstructorArgList()) {
+            BlancoCgParameter param = fCgFactory.createParameter(field.getName(), field.getType().getName(), field.getDescription());
+            param.setType(field.getType());
+            constMethod.getParameterList().add(param);
+            StringBuffer buf = new StringBuffer();
+            buf.append("this." + field.getName() + " = " + param.getName() + BlancoCgLineUtil.getTerminator(BlancoCgSupportedLang.JAVA));
+            constMethod.getLineList().add(buf.toString());
+        }
     }
 
     /**

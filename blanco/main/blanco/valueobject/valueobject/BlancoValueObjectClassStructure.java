@@ -2,6 +2,8 @@ package blanco.valueobject.valueobject;
 
 import java.util.List;
 
+import blanco.cg.valueobject.BlancoCgField;
+
 /**
  * バリューオブジェクトのクラスをあらわすバリューオブジェクトクラス。このクラスの設定情報をもとにクラスが自動生成されます。
  */
@@ -134,6 +136,22 @@ public class BlancoValueObjectClassStructure {
      * フィールド: [overridePackage]。
      */
     private String fOverridePackage;
+
+    /**
+     * 列挙型かどうか。通常は false。
+     *
+     * フィールド: [enumeration]。
+     * デフォルト: [false]。
+     */
+    private Boolean fEnumeration = false;
+
+    /**
+     * クラス定義に含めるコンストラクタの引数マップです。&lt;引数名, 型&gt; となります。
+     *
+     * フィールド: [constructorArgList]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.cg.valueobject.BlancoCgField&gt;()]。
+     */
+    private List<BlancoCgField> fConstructorArgList = new java.util.ArrayList<blanco.cg.valueobject.BlancoCgField>();
 
     /**
      * フィールド [name] の値を設定します。
@@ -520,6 +538,52 @@ public class BlancoValueObjectClassStructure {
     }
 
     /**
+     * フィールド [enumeration] の値を設定します。
+     *
+     * フィールドの説明: [列挙型かどうか。通常は false。]。
+     *
+     * @param argEnumeration フィールド[enumeration]に設定する値。
+     */
+    public void setEnumeration(final Boolean argEnumeration) {
+        fEnumeration = argEnumeration;
+    }
+
+    /**
+     * フィールド [enumeration] の値を取得します。
+     *
+     * フィールドの説明: [列挙型かどうか。通常は false。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[enumeration]から取得した値。
+     */
+    public Boolean getEnumeration() {
+        return fEnumeration;
+    }
+
+    /**
+     * フィールド [constructorArgList] の値を設定します。
+     *
+     * フィールドの説明: [クラス定義に含めるコンストラクタの引数マップです。<引数名, 型> となります。]。
+     *
+     * @param argConstructorArgList フィールド[constructorArgList]に設定する値。
+     */
+    public void setConstructorArgList(final List<BlancoCgField> argConstructorArgList) {
+        fConstructorArgList = argConstructorArgList;
+    }
+
+    /**
+     * フィールド [constructorArgList] の値を取得します。
+     *
+     * フィールドの説明: [クラス定義に含めるコンストラクタの引数マップです。<引数名, 型> となります。]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.cg.valueobject.BlancoCgField&gt;()]。
+     *
+     * @return フィールド[constructorArgList]から取得した値。
+     */
+    public List<BlancoCgField> getConstructorArgList() {
+        return fConstructorArgList;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -551,6 +615,8 @@ public class BlancoValueObjectClassStructure {
         buf.append(",fileDescription=" + fFileDescription);
         buf.append(",packageSuffix=" + fPackageSuffix);
         buf.append(",overridePackage=" + fOverridePackage);
+        buf.append(",enumeration=" + fEnumeration);
+        buf.append(",constructorArgList=" + fConstructorArgList);
         buf.append("]");
         return buf.toString();
     }
@@ -624,5 +690,11 @@ public class BlancoValueObjectClassStructure {
         // Name: fOverridePackage
         // Type: java.lang.String
         target.fOverridePackage = this.fOverridePackage;
+        // Name: fEnumeration
+        // Type: java.lang.Boolean
+        target.fEnumeration = this.fEnumeration;
+        // Name: fConstructorArgList
+        // Type: java.util.List
+        // Field[fConstructorArgList] is an unsupported type[java.util.Listblanco.cg.valueobject.BlancoCgField].
     }
 }

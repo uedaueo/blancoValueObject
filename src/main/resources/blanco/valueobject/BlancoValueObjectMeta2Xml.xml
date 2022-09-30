@@ -127,6 +127,9 @@
         <propertykey name="fileDescription" waitX="2">
           <value>ファイル説明</value>
         </propertykey>
+        <propertykey name="enumeration" waitX="2">
+          <value>列挙型として定義</value>
+        </propertykey>
         <propertykey name="generateToString" waitX="2">
           <value>toStringメソッドの生成</value>
         </propertykey>
@@ -205,9 +208,17 @@
         <tablecolumn name="fixedValue">
           <value>変更不可変数</value>
         </tablecolumn>
+        <tablecolumn name="constructorArg">
+          <value>コンストラクタ引数</value>
+        </tablecolumn>
         <tablecolumn name="description">
           <value>説明</value>
         </tablecolumn>
+
+        <valuemapping>
+          <result>true</result>
+          <source>○</source>
+        </valuemapping>
       </tableblock>
 
     </blancocalcparser>
