@@ -20,6 +20,7 @@ public class BlancoValueObjectUtil {
     public static boolean ignoreAnnotation = false;
     public static boolean ignoreImport = false;
     public static boolean preferJavaImport = true;
+    public static boolean isEnumeration = false;
 
     public static HashMap<String, BlancoValueObjectClassStructure> objects = new HashMap<>();
 

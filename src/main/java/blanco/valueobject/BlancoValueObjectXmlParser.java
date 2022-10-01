@@ -456,6 +456,7 @@ public class BlancoValueObjectXmlParser {
         argObjClassStructure.setEnumeration("true"
                 .equals(BlancoXmlBindingUtil.getTextContent(argElementCommon,
                         "enumeration")));
+        BlancoValueObjectUtil.isEnumeration = argObjClassStructure.getEnumeration();
         argObjClassStructure
                 .setFieldList(new ArrayList<blanco.valueobject.valueobject.BlancoValueObjectFieldStructure>());
 
@@ -694,7 +695,7 @@ public class BlancoValueObjectXmlParser {
              */
             String javaDefault = BlancoXmlBindingUtil.getTextContent(
                     elementList, "defaultJava");
-            if (BlancoStringUtil.null2Blank(javaDefault).length() == 0 && !BlancoValueObjectUtil.ignoreDefault) {
+            if (BlancoStringUtil.null2Blank(javaDefault).length() == 0 && (!BlancoValueObjectUtil.ignoreDefault || BlancoValueObjectUtil.isEnumeration)) {
                 String phpDefault = BlancoXmlBindingUtil.getTextContent(
                         elementList, "default");
                 if (BlancoStringUtil.null2Blank(phpDefault).length() != 0) {

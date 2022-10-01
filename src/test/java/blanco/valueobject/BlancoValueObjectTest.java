@@ -128,6 +128,7 @@ public class BlancoValueObjectTest {
         input.setLineSeparator("LF");
         input.setPackageSuffix("blanco");
         input.setVoPackageSuffix("blanco");
+        input.setIgnoreDefault(false);
 
         BlancoValueObjectProcessImpl imple = new BlancoValueObjectProcessImpl();
         try {
