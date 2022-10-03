@@ -280,7 +280,7 @@ public class BlancoValueObjectXml2JavaClass {
             buildMethodSet(argClassStructure, fieldStructure);
 
             // Generates a getter method.
-            buildMethodGet(argClassStructure, fieldStructure);
+            buildMethodGet(argClassStructure, fieldStructure, false);
         }
 
         if (argClassStructure.getGenerateToString()) {
@@ -399,6 +399,8 @@ public class BlancoValueObjectXml2JavaClass {
             }
             if (isConstArg != null && isConstArg) {
                 buildConstArg(argClassStructure, fieldStructure);
+                // Generates a getter method.
+                buildMethodGet(argClassStructure, fieldStructure, true);
             } else {
                 // Generates a field.
                 buildEnumerate(argClassStructure, fieldStructure);
@@ -436,7 +438,7 @@ public class BlancoValueObjectXml2JavaClass {
         /*
          * In blancoValueObject, the property name is prefixed with "f", but in Kotlin, it is not prefixed because of the implicit getter/setter.
          */
-        final BlancoCgField constParam = fCgFactory.createField(argFieldStructure.getName(),
+        final BlancoCgField constParam = fCgFactory.createField("f" + BlancoNameAdjuster.toClassName(argFieldStructure.getName()),
                 typeRaw, null);
         fCgEnumClass.getConstructorArgList().add(constParam);
 
@@ -457,7 +459,7 @@ public class BlancoValueObjectXml2JavaClass {
         /*
          * For the time being, private and getter/setter are not supported in blancoValueObjectKt.
          */
-        constParam.setAccess("public");
+        constParam.setAccess("private");
 
         // Sets the JavaDoc for the field.
         constParam.setDescription(argFieldStructure.getDescription());
@@ -687,8 +689,7 @@ public class BlancoValueObjectXml2JavaClass {
     /**
      * Generates a set method.
      *
-     * @param argFieldStructure
-     *            Field information.
+     * @param argFieldStructure Field information.
      */
     private void buildMethodSet(
             final BlancoValueObjectClassStructure argClassStructure,
@@ -735,18 +736,23 @@ public class BlancoValueObjectXml2JavaClass {
     /**
      * Generates a get method.
      *
-     * @param argFieldStructure
-     *            Field information.
+     * @param argFieldStructure Field information.
+     * @param isEnum
      */
     private void buildMethodGet(
             final BlancoValueObjectClassStructure argClassStructure,
-            final BlancoValueObjectFieldStructure argFieldStructure) {
+            final BlancoValueObjectFieldStructure argFieldStructure,
+            boolean isEnum) {
         // Generates a getter method for each field.
         final BlancoCgMethod method = fCgFactory.createMethod("get"
                 + getFieldNameAdjustered(argClassStructure, argFieldStructure),
                 fBundle.getXml2javaclassGetJavadoc01(argFieldStructure
                         .getName()));
-        fCgClass.getMethodList().add(method);
+        if (isEnum) {
+            fCgEnumClass.getMethodList().add(method);
+        } else {
+            fCgClass.getMethodList().add(method);
+        }
 
         // JavaDoc configuration of the method.
         if (argFieldStructure.getDescription() != null) {
