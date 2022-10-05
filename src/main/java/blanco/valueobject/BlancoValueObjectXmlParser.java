@@ -665,7 +665,7 @@ public class BlancoValueObjectXmlParser {
             // Supports for required. (Giving NotNull annotation)
             fieldStructure.setRequired("true".equals(BlancoXmlBindingUtil
                     .getTextContent(elementList, "required")));
-            if (fieldStructure.getRequired()) {
+            if (fieldStructure.getRequired() && !BlancoValueObjectUtil.ignoreAnnotation) {
                 fieldStructure.getAnnotationList().add("NotNull");
                 argClassStructure.getImportList().add("javax.validation.constraints.NotNull");
             }

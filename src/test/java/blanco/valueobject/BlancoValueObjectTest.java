@@ -105,7 +105,7 @@ public class BlancoValueObjectTest {
 //        input.setSearchTmpdir("tmpTest");
         input.setVoPackageSuffix("blanco");
         input.setIgnoreImport(true);
-        input.setIgnoreAnnotation(true);
+        input.setIgnoreAnnotation(false);
 
         BlancoValueObjectProcessImpl imple = new BlancoValueObjectProcessImpl();
         try {
