@@ -9,11 +9,12 @@
  */
 package blanco.valueobject;
 
+import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
+
 import blanco.valueobject.task.BlancoValueObjectProcessImpl;
 import blanco.valueobject.task.valueobject.BlancoValueObjectProcessInput;
-import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * Java言語用の生成試験。

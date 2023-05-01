@@ -242,7 +242,7 @@ public class BlancoValueObjectXml2JavaClass {
         }
 
         /* Sets the annotation for the class. */
-        List annotationList = argClassStructure.getAnnotationList();
+        List<String> annotationList = argClassStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
             fCgClass.getAnnotationList().addAll(argClassStructure.getAnnotationList());
             /* tueda DEBUG */
@@ -533,7 +533,7 @@ public class BlancoValueObjectXml2JavaClass {
         }
 
         /* Sets the annotation for the method. */
-        List annotationList = argFieldStructure.getAnnotationList();
+        List<String> annotationList = argFieldStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
             constParam.getAnnotationList().addAll(annotationList);
 //            System.out.println("/* tueda */ method annotation = " + constParam.getAnnotationList().get(0));
@@ -679,7 +679,7 @@ public class BlancoValueObjectXml2JavaClass {
         }
 
         /* Sets the annotation for the method. */
-        List annotationList = argFieldStructure.getAnnotationList();
+        List<String> annotationList = argFieldStructure.getAnnotationList();
         if (annotationList != null && annotationList.size() > 0) {
             field.getAnnotationList().addAll(annotationList);
             System.out.println("/* tueda */ method annotation = " + field.getAnnotationList().get(0));
